@@ -10,21 +10,66 @@
 char *map[] = {
     "1111111111",
     "1000000001",
-    "1000011001",
-    "1000011001",
+    "1000010001",
+    "1001000001",
     "1000011001",
     "1000000001",
     "1111111111",
     NULL
 };
 
-void distances(int posx, int posy)
+
+void draw_player(void *mlx, void *win, int cx, int cy)
+{
+    int r = 6; 
+    int y = -r;
+    int color = 0x00FF00; 
+
+    while (y <= r)
+    {
+        int x = -r;
+        while (x <= r)
+        {
+            if (x * x + y * y <= r * r)
+                mlx_pixel_put(mlx, win, cx + x, cy + y, color);
+            x++;
+        }
+        y++;
+    }
+}
+
+void draw_ray_to_hit(void *mlx, void *win, int player_x, int player_y, double targetx, double targety ,double angle)
+{
+    double x;
+    double y;
+    double rx;
+    double ry;
+
+    rx = cos(angle);
+    ry = sin(angle);
+    x = player_x;
+    y = player_y;
+    while (true)
+    {
+        // printf("to hit\n");
+        // fflush(stdout);
+        mlx_pixel_put(mlx, win, (int)x, (int)y, 0xFF0000);
+        x += rx;
+        y -= ry;
+        // if ((int)x % 64 == 0 || (int)y % 64 == 0)
+        //     draw_player(mlx, win, (int)x, (int)y);
+        if (x >= targetx * 64 ) // || y >= targety * 64)
+            break ;
+    }
+}
+
+void distances(int posx, int posy, void *mlx, void *win, double angle)
 {
     double pos_x;
     double pos_y;
     int mapx;
     int mapy;
-    double angle;
+    // double angle;
     double raydirx;
     double raydiry;
     double deltax;
@@ -34,7 +79,7 @@ void distances(int posx, int posy)
     double sidedistx; 
     double sidedisty;
 
-    angle = M_PI / 6;
+    // angle = M_PI / 6 + 0.3;
 
     raydirx = cos(angle);
     raydiry = -sin(angle);
@@ -104,28 +149,30 @@ void distances(int posx, int posy)
                 hitY = pos_y + ((mapx - pos_x + (1 - stepx)/2) * raydiry / raydirx);
             printf("Ray hit! Grid: (%d, %d), Exact: (%f, %f)\n",
                    mapx, mapy, hitX, hitY);
+            draw_ray_to_hit(mlx, win, posx, posy, hitX, hitY, angle);
+            
         }
     }   
 }
 
-void draw_player(void *mlx, void *win, int cx, int cy)
-{
-    int r = 6; 
-    int y = -r;
-    int color = 0x00FF00; 
 
-    while (y <= r)
+void multiple_ray(void *mlx, void *win, int posx, int posy, double angle)
+{
+    int ray_count = 500;
+    int i = 0;
+    double first_ray = angle - 0.3;
+    double last_ray  = angle + 0.3;
+    double angle_step = (last_ray - first_ray) / ray_count;
+
+    while (i < ray_count)
     {
-        int x = -r;
-        while (x <= r)
-        {
-            if (x * x + y * y <= r * r)
-                mlx_pixel_put(mlx, win, cx + x, cy + y, color);
-            x++;
-        }
-        y++;
+        double ray_angle = first_ray + i * angle_step;
+        distances(posx, posy, mlx, win, ray_angle);
+        i++;
     }
 }
+
+
 
 void draw_ray(void *mlx, void *win, int player_x, int player_y, double angle)
 {
@@ -149,6 +196,7 @@ void draw_ray(void *mlx, void *win, int player_x, int player_y, double angle)
             break ;
     }
 }
+
 
 void draw_lines(void *mlx, void *win)
 {
@@ -228,9 +276,10 @@ int main()
     draw_lines(mlx, win);
     draw_player(mlx, win, 145, 370);
     // draw_ray(mlx, win, 145, 370, angle);
-    draw_ray(mlx, win, 145, 370, M_PI / 6 - 0.3);
-    draw_ray(mlx, win, 145, 370, M_PI / 6);
-    draw_ray(mlx, win, 145, 370, M_PI / 6 + 0.3);
-    distances(145, 370);
+    // draw_ray(mlx, win, 145, 370, M_PI / 6 - 0.3);
+    // draw_ray(mlx, win, 145, 370, M_PI / 6);
+    // draw_ray(mlx, win, 145, 370, M_PI / 6 + 0.3);
+    multiple_ray(mlx, win, 145, 370, M_PI / 6);
+    // distances(145, 370, mlx, win, angle);
     mlx_loop(mlx);   
 }
