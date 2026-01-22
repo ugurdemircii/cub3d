@@ -5,7 +5,14 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-
+typedef struct s_game
+{
+    int posx;
+    int posy;
+    double angle;
+    void *mlx;
+    void *win;
+}t_game;
 
 char *map[] = {
     "1111111111",
@@ -38,30 +45,32 @@ void draw_player(void *mlx, void *win, int cx, int cy)
     }
 }
 
-void draw_ray_to_hit(void *mlx, void *win, int player_x, int player_y, double targetx, double targety ,double angle)
+void draw_ray_to_hit(void *mlx, void *win, int beginx, int beginy, double endx, double endy)
 {
-    double x;
-    double y;
-    double rx;
-    double ry;
+    double deltax;
+    double deltay;
+    double pixelx;
+    double pixely;
+    int pixels;
 
-    rx = cos(angle);
-    ry = sin(angle);
-    x = player_x;
-    y = player_y;
-    while (true)
+    endx *= 64;
+    endy *= 64;
+    deltax = endx - beginx;
+    deltay = endy - beginy;
+    pixelx = beginx;
+    pixely = beginy;
+    pixels = sqrt((deltax * deltax) + (deltay * deltay));
+    deltax /= pixels;
+    deltay /= pixels;
+    while (pixels)
     {
-        // printf("to hit\n");
-        // fflush(stdout);
-        mlx_pixel_put(mlx, win, (int)x, (int)y, 0xFF0000);
-        x += rx;
-        y -= ry;
-        // if ((int)x % 64 == 0 || (int)y % 64 == 0)
-        //     draw_player(mlx, win, (int)x, (int)y);
-        if (x >= targetx * 64 ) // || y >= targety * 64)
-            break ;
+        mlx_pixel_put(mlx, win, (int)pixelx, (int)pixely, 0xFF0000);
+        pixelx += deltax;
+        pixely += deltay;
+        pixels--;
     }
 }
+
 
 void distances(int posx, int posy, void *mlx, void *win, double angle)
 {
@@ -138,19 +147,27 @@ void distances(int posx, int posy, void *mlx, void *win, double angle)
         if (map[mapy][mapx] == '1')
         {
             hit = 1;
-            double hitX, hitY;
-            if (side == 0) 
-                hitX = mapx;
+            double hitX;
+            double hitY;
+
+            if (side == 0)
+            {
+                if (stepx > 0)
+                    hitX = mapx;
+                else
+                    hitX = mapx + 1.0;
+
+                hitY = pos_y + (hitX - pos_x) * (raydiry / raydirx);
+            }
             else
-                hitX = pos_x + ((mapy - pos_y + (1 - stepy)/2) * raydirx / raydiry);
-            if (side == 1)
-                hitY = mapy;
-            else
-                hitY = pos_y + ((mapx - pos_x + (1 - stepx)/2) * raydiry / raydirx);
-            printf("Ray hit! Grid: (%d, %d), Exact: (%f, %f)\n",
-                   mapx, mapy, hitX, hitY);
-            draw_ray_to_hit(mlx, win, posx, posy, hitX, hitY, angle);
-            
+            {
+                if (stepy > 0)
+                    hitY = mapy;
+                else
+                    hitY = mapy + 1.0;
+                hitX = pos_x + (hitY - pos_y) * (raydirx / raydiry);
+            }
+            draw_ray_to_hit(mlx, win, posx, posy, hitX, hitY);
         }
     }   
 }
@@ -265,8 +282,79 @@ void draw_square(char *map[], void *mlx, void *win)
     }
 }
 
+int is_wall(double x, double y)
+{
+    int mapx = (int)((x) / 64);
+    int mapy = (int)((y) / 64);
+
+    if (map[mapy][mapx] == '1')
+        return 1;
+    return 0;
+}
+
+void rotate_left(t_game *game)
+{
+    game->angle -= 0.2;
+}
+
+void rotate_right(t_game *game)
+{
+    game->angle += 0.2;
+}
+
+void move_backward(t_game *game)
+{
+    double newx = game->posx - cos(game->angle) * 10;
+    double newy = game->posy + sin(game->angle) * 10;
+
+    if (!is_wall(newx, game->posy))
+        game->posx = newx;
+    if (!is_wall(game->posx, newy))
+        game->posy = newy;
+}
+
+
+void move_forward(t_game *game)
+{
+    double newx = game->posx + cos(game->angle) * 10;
+    double newy = game->posy - sin(game->angle) * 10;
+
+    if (!is_wall(newx, game->posy))
+        game->posx = newx;
+    if (!is_wall(game->posx, newy))
+        game->posy = newy;
+}
+
+
+int key_hook(int keycode, void *param)
+{
+    t_game *game = (t_game *)param;
+
+    if (keycode == 13)
+        move_forward(game);
+    if (keycode == 1)
+        move_backward(game);
+    if (keycode == 2)
+        rotate_left(game);
+    if (keycode == 0)
+        rotate_right(game);
+    if (keycode == 53)
+        exit(0);
+
+    mlx_clear_window(game->mlx, game->win);
+    draw_square(map, game->mlx, game->win);
+    draw_lines(game->mlx, game->win);
+    draw_player(game->mlx, game->win, game->posx, game->posy);
+    multiple_ray(game->mlx, game->win, game->posx, game->posy, game->angle);
+
+    return 0;
+}
+
+
 int main()
 {
+    t_game game;
+
     double angle = M_PI / 4;
     int win_x = 640;
     int win_y = 448;
@@ -275,11 +363,17 @@ int main()
     draw_square(map, mlx, win);
     draw_lines(mlx, win);
     draw_player(mlx, win, 145, 370);
+    game.posx = 145;
+    game.posy = 370;
+    game.angle = M_PI / 6;
+    game.mlx = mlx;
+    game.win = win;
     // draw_ray(mlx, win, 145, 370, angle);
     // draw_ray(mlx, win, 145, 370, M_PI / 6 - 0.3);
     // draw_ray(mlx, win, 145, 370, M_PI / 6);
     // draw_ray(mlx, win, 145, 370, M_PI / 6 + 0.3);
     multiple_ray(mlx, win, 145, 370, M_PI / 6);
     // distances(145, 370, mlx, win, angle);
+    mlx_key_hook(win, key_hook, &game);
     mlx_loop(mlx);   
 }
