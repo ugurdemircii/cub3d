@@ -83,13 +83,22 @@ void texture_check(t_cube *cube,char *line)
 
 }
 
-// int	is_valid(char c)
-// {
-// 	if (c == '1' || c == '0' || c == ' '
-// 		|| c == 'N' || c == 'S' || c == 'E' || c == 'W')
-//         return 1;
-//     return 0;
-// }
+int	is_valid(char c)
+{
+	if (c == '1' || c == '0' || c == ' '
+		|| c == 'N' || c == 'S' || c == 'E' || c == 'W')
+        return 1;
+    return 0;
+}
+
+int	is_char(char c)
+{
+	if (c == '0' ||c == 'N' || c == 'S' ||
+        c == 'E' || c == 'W')
+        return 1;
+    return 0;
+}
+
 
 static int	is_map_line(char *line)
 {
@@ -308,15 +317,89 @@ void	find_map_start(t_cube *cube)
     printf("no map");
 }
 
-static int	count_map_height(t_cube *cube)
+static int	space_check(t_cube *cube, int i, int j)
 {
-	
+	if (i == 0 || i == cube->map.height - 1)
+		return (1);
+	if (j == 0 || j == cube->map.width - 1)
+		return (1);
+	if (cube->map.maps[i - 1][j] == ' ' ||cube->map.maps[i + 1][j] == ' '
+        || cube->map.maps[i][j - 1] == ' ' || cube->map.maps[i][j + 1] == ' ')
+		return (1);
+	return (0);
 }
 
-static int	count_map_width(t_cube *cube)
+static int	check_sides(t_cube *cube)
 {
-	
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < cube->map.height)
+	{
+		j = 0;
+		while (j < cube->map.width)
+		{
+			if (is_char(cube->map.maps[i][j])
+				&& space_check(cube, i, j))
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
 }
+
+static int	map_alloc(t_cube *cube)
+{
+	int	i;
+
+	cube->map.maps = malloc(sizeof(char *) * (cube->map.height + 1));
+	if (!cube->map.maps)
+		return (1);
+	i = 0;
+	while (i < cube->map.height)
+	{
+		cube->map.maps[i] = malloc(cube->map.width + 1);
+		if (!cube->map.maps[i])
+			return (1);
+		i++;
+	}
+	cube->map.maps[i] = NULL;
+	return (0);
+}
+
+static void	fill_map(t_cube *cube, int i)
+{
+	int	j;
+	int	k;
+
+	j = 0;
+	k = cube->map.map_start + i;
+	while (j < cube->map.width)
+	{
+		if (cube->lines[k][j]
+			&& cube->lines[k][j] != '\n')
+			cube->map.maps[i][j] = cube->lines[k][j];
+		else
+			cube->map.maps[i][j] = ' ';
+		j++;
+	}
+	cube->map.maps[i][j] = '\0';
+}
+
+static int	get_map(t_cube *cube)
+{
+	int	i;
+
+	if (map_alloc(cube))
+		return (1);
+	i = -1;
+	while (++i < cube->map.height)
+		fill_map(cube, i);
+	return (0);
+}
+
 
 static void handle_space(t_cube *cube)
 {
@@ -335,7 +418,7 @@ static void handle_space(t_cube *cube)
                 || cube->map.maps[i][j+1] == '0' || cube->map.maps[i][j-1] == '0')
                 {
                     printf("wrong space place");
-                    return 1;
+                    exit;
                 }
                 else
                 {
