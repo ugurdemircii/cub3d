@@ -27,6 +27,7 @@ typedef struct s_map
     char    **maps;
     int     width;
     int     height;
+    int     map_start;
 
 } t_map;
 

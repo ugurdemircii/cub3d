@@ -91,40 +91,111 @@ void texture_check(t_cube *cube,char *line)
 //     return 0;
 // }
 
-// int is_empty_line(char *line)
-// {
-//     int i = 0;
-    
-//     if (!line)
-//         return (1);
-    
-//     while (line[i])
-//     {
-//         if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n'
-//             && line[i] != '\r' && line[i] != '\v')
-//             return (0);
-//         i++;
-//     }
-//     return (1);
-// }
+static int	is_map_line(char *line)
+{
+	int	i;
+	int	w;
 
-// int up_down_check(t_cube *cube,t_map *map)
-// {
-//     int i;
+	if (!line || *line == '\0')
+		return (0);
 
-//     i = 0; 
-//     while(map->maps[0][i])
-//     {
-//         if (map->maps[0][i++] != 0)
-//             return 0;
-//     }
-//     i = 0;
-//     while(map->maps[map->height][i])
-//     {
-//         if (map->maps[map->height][i++] != 0)
-//             return 0;
-//     }
-// }
+	i = 0;
+	w = 0;
+	while (line[i])
+	{
+		if (line[i] == '\n')
+			break ;
+		if (line[i] == '1')
+			w = 1;
+		else if (line[i] != '0' && line[i] != 'N'
+			&& line[i] != 'S' && line[i] != 'E'
+			&& line[i] != 'W' && line[i] != ' ')
+			return (0);
+		i++;
+	}
+	return (w);
+}
+
+int	count_map_height(t_cube *cube)
+{
+	int	i;
+	int	height;
+
+	height = 0;
+	i = cube->map.map_start;
+	while (cube->lines[i])
+	{
+		if (is_map_line(cube->lines[i]))
+			height++;
+		else
+			break ;
+		i++;
+	}
+	cube->map.height = height;
+	return (height);
+}
+
+int	count_map_width(t_cube *cube)
+{
+	int	i;
+	int	j;
+	int	max;
+    int h;
+
+	max = 0; 
+    h = cube->map.map_start + cube->map.height;
+	i = cube->map.map_start;
+	while (i < h)
+	{
+		j = 0;
+		while (cube->lines[i][j] && cube->lines[i][j] != '\n')
+			j++;
+		if (j > max)
+			max = j;
+		i++;
+	}
+	cube->map.width = max;
+	return (max);
+}
+
+int is_empty_line(char *line)
+{
+    int i = 0;
+    
+    if (!line)
+        return (1);
+    
+    while (line[i])
+    {
+        if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n'
+            && line[i] != '\r' && line[i] != '\v')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
+int up_down_check(t_cube *cube,t_map *map)
+{
+    int i;
+
+    i = 0; 
+    while (map->maps[0][i])
+	{
+		if (map->maps[0][i] != '1' && map->maps[0][i] != ' ')
+			return (1);
+		i++;
+	}
+	i = 0;
+	while (map->maps[map->height - 1][i])
+	{
+		if (map->maps[map->height - 1][i] != '1' &&
+			map->maps[map->height - 1][i] != ' ')
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 
 int check_path(t_cube *cube, char *path)
@@ -208,6 +279,74 @@ int read_lines(t_cube *cube, char *path)
 
 
 
+}
+
+void	find_map_start(t_cube *cube)
+{
+	int	i;
+	int	j;
+	int	wall;
+
+	i = -1;
+	while (cube->lines[++i])
+	{
+		j = -1;
+		wall = 0;
+		while (cube->lines[i][++j])
+		{
+			if (cube->lines[i][j] == '1')
+				wall = 1;
+			else if (!(cube->lines[i][j] == ' '))
+				break ;
+		}
+		if (wall && !cube->lines[i][j])
+		{
+			cube->map.map_start = i;
+			return ;
+		}
+	}
+    printf("no map");
+}
+
+static int	count_map_height(t_cube *cube)
+{
+	
+}
+
+static int	count_map_width(t_cube *cube)
+{
+	
+}
+
+static void handle_space(t_cube *cube)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while (i < cube->map.height)
+    {
+        j = 0;
+        while(j < cube->map.width)
+        {
+            if (cube->map.maps[i][j] == ' ')
+            {
+                if (cube->map.maps[i+1][j] == '0' || cube->map.maps[i-1][j] == '0'
+                || cube->map.maps[i][j+1] == '0' || cube->map.maps[i][j-1] == '0')
+                {
+                    printf("wrong space place");
+                    return 1;
+                }
+                else
+                {
+                    cube->map.maps[i][j] == '1';
+                }
+            }
+            j++;
+        }
+        i++;
+    }
+    
 }
 
 static int	locate_player(t_cube *cube)
