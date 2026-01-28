@@ -2,7 +2,7 @@ NAME = cub3d
 
 CC = cc
 CFLAGS =
-SRC = a.c
+SRC = a.c b.c
 OBJ = $(SRC:.c=.o)
 
 MLX = -framework OpenGL -framework AppKit -lmlx

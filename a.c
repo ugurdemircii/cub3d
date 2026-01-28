@@ -1,3 +1,4 @@
+#include "a.h"
 #include "mlx/mlx.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -5,21 +6,21 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-typedef struct s_game
-{
-    int posx;
-    int posy;
-    double angle;
-    void *mlx;
-    void *win;
-}t_game;
+// typedef struct s_game
+// {
+//     int posx;
+//     int posy;
+//     double angle;
+//     void *mlx;
+//     void *win;
+// }t_game;
 
 char *map[] = {
     "1111111111",
     "1000000001",
-    "1000010001",
+    "1000000001",
     "1001000001",
-    "1000011001",
+    "1000000001",
     "1000000001",
     "1111111111",
     NULL
@@ -119,6 +120,7 @@ void distances(int posx, int posy, void *mlx, void *win, double angle)
         stepy = 1;
         sidedisty = (mapy + 1.0 - pos_y) * deltay;
     }
+    printf("-----------------\n");
     printf("player pos  %f %f\n",pos_x,pos_y);
     printf("ray  pos   %d %d\n",mapx,mapy);
     printf("ray dir x  y  %f %f \n",raydirx, raydiry);
@@ -144,6 +146,7 @@ void distances(int posx, int posy, void *mlx, void *win, double angle)
         }
         printf("Step %d: map=(%d,%d) sideDistX=%f sideDistY=%f side=%d\n",
                step_count, mapx, mapy, sidedistx, sidedisty, side);
+        printf("-----------------\n");
         if (map[mapy][mapx] == '1')
         {
             hit = 1;
@@ -305,7 +308,7 @@ void rotate_right(t_game *game)
 void move_backward(t_game *game)
 {
     double newx = game->posx - cos(game->angle) * 10;
-    double newy = game->posy + sin(game->angle) * 10;
+    double newy = game->posy - sin(game->angle) * 10;
 
     if (!is_wall(newx, game->posy))
         game->posx = newx;
@@ -317,7 +320,7 @@ void move_backward(t_game *game)
 void move_forward(t_game *game)
 {
     double newx = game->posx + cos(game->angle) * 10;
-    double newy = game->posy - sin(game->angle) * 10;
+    double newy = game->posy + sin(game->angle) * 10;
 
     if (!is_wall(newx, game->posy))
         game->posx = newx;
@@ -334,18 +337,19 @@ int key_hook(int keycode, void *param)
         move_forward(game);
     if (keycode == 1)
         move_backward(game);
-    if (keycode == 2)
-        rotate_left(game);
     if (keycode == 0)
+        rotate_left(game);
+    if (keycode == 2)
         rotate_right(game);
     if (keycode == 53)
         exit(0);
 
     mlx_clear_window(game->mlx, game->win);
-    draw_square(map, game->mlx, game->win);
-    draw_lines(game->mlx, game->win);
-    draw_player(game->mlx, game->win, game->posx, game->posy);
-    multiple_ray(game->mlx, game->win, game->posx, game->posy, game->angle);
+    // draw_square(map, game->mlx, game->win);
+    // draw_lines(game->mlx, game->win);
+    // draw_player(game->mlx, game->win, game->posx, game->posy);
+    // multiple_ray(game->mlx, game->win, game->posx, game->posy, game->angle);
+    // raycast(game);
 
     return 0;
 }
@@ -360,20 +364,22 @@ int main()
     int win_y = 448;
     void *mlx = mlx_init();
     void *win = mlx_new_window(mlx, win_x, win_y, "cub3d");
-    draw_square(map, mlx, win);
-    draw_lines(mlx, win);
-    draw_player(mlx, win, 145, 370);
-    game.posx = 145;
-    game.posy = 370;
-    game.angle = M_PI / 6;
+    // draw_square(map, mlx, win);
+    // draw_lines(mlx, win);
+    // draw_player(mlx, win, 145, 370);
+    game.posx = 320;
+    game.posy = 448;
+    game.angle = M_PI / 2;
     game.mlx = mlx;
     game.win = win;
+    game.map = map;
     // draw_ray(mlx, win, 145, 370, angle);
     // draw_ray(mlx, win, 145, 370, M_PI / 6 - 0.3);
     // draw_ray(mlx, win, 145, 370, M_PI / 6);
     // draw_ray(mlx, win, 145, 370, M_PI / 6 + 0.3);
-    multiple_ray(mlx, win, 145, 370, M_PI / 6);
+    // multiple_ray(mlx, win, 145, 370, M_PI / 6);
     // distances(145, 370, mlx, win, angle);
-    mlx_key_hook(win, key_hook, &game);
+    raycast(&game);
+    // mlx_key_hook(win, key_hook, &game);
     mlx_loop(mlx);   
 }
