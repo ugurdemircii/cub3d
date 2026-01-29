@@ -44,7 +44,7 @@ void calc_values(t_game *game, int x, int width, t_values *values)
     printf("%f\n",values->raydir_y);
 }
 
-void dda_loop(t_values *values, t_game *game)
+int dda_loop(t_values *values, t_game *game)
 {
     int hit;
     int side;
@@ -71,6 +71,18 @@ void dda_loop(t_values *values, t_game *game)
             hit = 1;
         }
     }
+    return (side);
+}
+
+double perp_dist(t_values values, int side)
+{
+    double perp_dist;
+
+    if (side == 0)
+        perp_dist = values.perp_x - values.delta_x;
+    else
+        perp_dist = values.perp_y - values.delta_y;
+    return (perp_dist);
 }
 
 void raycast(t_game *game)
@@ -78,6 +90,8 @@ void raycast(t_game *game)
     int x;
     int h;
     int w;
+    int side;
+    double dist;
 
     x = 0;
     w = 640;
@@ -87,7 +101,8 @@ void raycast(t_game *game)
     {
         calc_values(game, x, w, &values);
         printf("dda\n");
-        dda_loop(&values, game);
+        side = dda_loop(&values, game);
+        dist = perp_dist(values, side);
         x++;
     }
 }

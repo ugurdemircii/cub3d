@@ -16,23 +16,23 @@ typedef struct s_game
 
 typedef struct s_values
 {
-        double cam_x;
-        double plane_x; 
-        double plane_y;
-        double dir_x; 
-        double dir_y;
-        double raydir_x; 
-        double raydir_y;
-        double delta_x;
-        double delta_y;
-        double spos_x;
-        double spos_y;
-        double perp_x;
-        double perp_y;
-        int map_x;
-        int map_y;
-        int step_x;
-        int step_y;
+    double cam_x;
+    double plane_x; 
+    double plane_y;
+    double dir_x; 
+    double dir_y;
+    double raydir_x; 
+    double raydir_y;
+    double delta_x;
+    double delta_y;
+    double spos_x;
+    double spos_y;
+    double perp_x;
+    double perp_y;
+    int map_x;
+    int map_y;
+    int step_x;
+    int step_y;
 }t_values;
 
 
