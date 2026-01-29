@@ -44,6 +44,35 @@ void calc_values(t_game *game, int x, int width, t_values *values)
     printf("%f\n",values->raydir_y);
 }
 
+void dda_loop(t_values *values, t_game *game)
+{
+    int hit;
+    int side;
+
+    hit = 0;
+    printf("looop\n");
+    while (hit == 0)
+    {
+        if (values->perp_x < values->perp_y) 
+        {
+            values->perp_x += values->delta_x;
+            values->map_x += values->step_x;
+            side = 0;
+        } 
+        else 
+        {
+            values->perp_y += values->delta_y;
+            values->map_y += values->step_y;
+            side = 1;
+        }
+        if (game->map[values->map_y][values->map_x] == '1') 
+        {
+            printf("mapx %d mapy%d\n", values->map_x,values->map_y);
+            hit = 1;
+        }
+    }
+}
+
 void raycast(t_game *game)
 {
     int x;
@@ -57,6 +86,8 @@ void raycast(t_game *game)
     while (x < 640)
     {
         calc_values(game, x, w, &values);
+        printf("dda\n");
+        dda_loop(&values, game);
         x++;
     }
 }

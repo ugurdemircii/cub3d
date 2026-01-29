@@ -368,7 +368,7 @@ int main()
     // draw_lines(mlx, win);
     // draw_player(mlx, win, 145, 370);
     game.posx = 320;
-    game.posy = 448;
+    game.posy = 220;
     game.angle = M_PI / 2;
     game.mlx = mlx;
     game.win = win;
