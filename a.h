@@ -35,7 +35,7 @@ typedef struct s_values
     int step_y;
 }t_values;
 
-
+void texture(t_game *game, t_values *values, int side, double perp_dist, int line_h, int start, int end, int x);
 void raycast(t_game *game);
 
 #endif

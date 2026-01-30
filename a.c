@@ -369,7 +369,6 @@ int main()
     // draw_player(mlx, win, 145, 370);
     game.posx = 192;
     game.posy = 300;
-    game.angle = M_PI / 2;
     game.mlx = mlx;
     game.win = win;
     game.map = map;

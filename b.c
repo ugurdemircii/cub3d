@@ -95,7 +95,7 @@ void draw_line(t_game *game, int x, int start, int end)
     }
 }
 
-void set_line_h(double dist, int h, int x, t_game *game)
+void set_line_h(double dist, int h, int x, t_game *game, t_values *values, int side)
 {
     int line_h;
     int start;
@@ -108,7 +108,8 @@ void set_line_h(double dist, int h, int x, t_game *game)
         start = 0;
     if (end > h)
         end = h;
-    draw_line(game, x, start, end);
+    texture(game, values, side, dist, line_h, start, end, x);
+    // draw_line(game, x, start, end);
 }
 
 void raycast(t_game *game)
@@ -129,7 +130,7 @@ void raycast(t_game *game)
         printf("dda\n");
         side = dda_loop(&values, game);
         dist = perp_dist(values, side);
-        set_line_h(dist, h, x, game);
+        set_line_h(dist, h, x, game, &values, side);
         x++;
     }
 }
