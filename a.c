@@ -17,11 +17,11 @@
 
 char *map[] = {
     "1111111111",
-    "1000000001",
-    "1000000001",
+    "1001000001",
+    "1001000001",
     "1001000001",
     "1000000001",
-    "1000000001",
+    "1000011111",
     "1111111111",
     NULL
 };
@@ -349,7 +349,7 @@ int key_hook(int keycode, void *param)
     // draw_lines(game->mlx, game->win);
     // draw_player(game->mlx, game->win, game->posx, game->posy);
     // multiple_ray(game->mlx, game->win, game->posx, game->posy, game->angle);
-    // raycast(game);
+    raycast(game);
 
     return 0;
 }
@@ -367,8 +367,8 @@ int main()
     // draw_square(map, mlx, win);
     // draw_lines(mlx, win);
     // draw_player(mlx, win, 145, 370);
-    game.posx = 320;
-    game.posy = 220;
+    game.posx = 192;
+    game.posy = 300;
     game.angle = M_PI / 2;
     game.mlx = mlx;
     game.win = win;
@@ -380,6 +380,6 @@ int main()
     // multiple_ray(mlx, win, 145, 370, M_PI / 6);
     // distances(145, 370, mlx, win, angle);
     raycast(&game);
-    // mlx_key_hook(win, key_hook, &game);
+    mlx_key_hook(win, key_hook, &game);
     mlx_loop(mlx);   
 }
