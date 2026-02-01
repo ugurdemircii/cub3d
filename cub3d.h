@@ -1,10 +1,11 @@
-#ifndef CUB3D.H 
-# define CUB3D.H 
+#ifndef CUB3D_H 
+# define CUB3D_H 
 
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "libft/libft.h"
 
 typedef struct s_player
 {
@@ -20,6 +21,8 @@ typedef struct s_text
     char *no;
     char *so;
     int fd;
+    int floor;
+    int ceiling;
 } t_text;
 
 typedef struct s_map
@@ -48,5 +51,7 @@ typedef struct s_cube
 
 char	*get_next_line(int fd);
 char	*ft_strtrim(char const *s1, char const *set);
+int     parse_colour(t_cube *cube, char *line);
+void	free_cube(t_cube *cube);
 
 #endif
