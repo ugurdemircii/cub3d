@@ -16,6 +16,7 @@ typedef struct s_player
 
 typedef struct s_text
 {
+    char **colour;
     char *ea;
     char *we;
     char *no;
@@ -23,6 +24,8 @@ typedef struct s_text
     int fd;
     int floor;
     int ceiling;
+    int f_check;
+    int c_check;
 } t_text;
 
 typedef struct s_map
@@ -53,5 +56,6 @@ char	*get_next_line(int fd);
 char	*ft_strtrim(char const *s1, char const *set);
 int     parse_colour(t_cube *cube, char *line);
 void	free_cube(t_cube *cube);
+int	ft_isspace(int c);
 
 #endif
