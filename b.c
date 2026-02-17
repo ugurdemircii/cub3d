@@ -36,13 +36,13 @@ void calc_values(t_game *game, int x, int width, t_values *values)
         values->step_y = 1;
         values->perp_y = (values->map_y + 1 - values->spos_y) * values->delta_y;
     }
-    printf("%f\n",values->cam_x);
-    printf("%f\n",values->plane_x);
-    printf("%f\n",values->plane_y);
-    printf("%f\n",values->dir_x);
-    printf("%f\n",values->dir_y);
-    printf("%f\n",values->raydir_x);
-    printf("%f\n",values->raydir_y);
+    // printf("%f\n",values->cam_x);
+    // printf("%f\n",values->plane_x);
+    // printf("%f\n",values->plane_y);
+    // printf("%f\n",values->dir_x);
+    // printf("%f\n",values->dir_y);
+    // printf("%f\n",values->raydir_x);
+    // printf("%f\n",values->raydir_y);
 }
 
 int dda_loop(t_values *values, t_game *game)
@@ -109,6 +109,7 @@ void set_line_h(double dist, int h, int x, t_game *game, t_values *values, int s
     if (end > h)
         end = h;
     texture(game, values, side, dist, line_h, start, end, x);
+    draw_ceil_floor(game, x, start, end, h);
     // draw_line(game, x, start, end);
 }
 
