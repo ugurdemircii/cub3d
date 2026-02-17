@@ -223,15 +223,10 @@ int up_down_check(t_cube *cube)
 	{
 		if (cube->map.maps[0][i] != '1' && cube->map.maps[0][i] != ' ')
             return (1);
-        //printf("%d\n",i);
         i++;
         
 	}
-    //printf("**%d\n",i);
 	i = 0;
-    //printf("-*-*%s-*-*-\n",cube->map.maps[0]);
-    printf("%d\n",cube->map.height);
-    
 	while (cube->map.maps[cube->map.height - 1][i])
 	{
 		if (cube->map.maps[(cube->map.height) - 1][i] != '1' &&
@@ -290,7 +285,7 @@ int read_lines(t_cube *cube, char *path)
         return (1);
     }
 
-    cube->lines = malloc(sizeof(char *)* (i + 1));
+    cube->lines = ft_calloc(sizeof(char *)* (i + 1), 1);
 
     if (!cube->lines)
         return 1;
@@ -517,15 +512,14 @@ static int	map_alloc(t_cube *cube)
     int k;
 
     j = cube->map.map_start;
-	cube->map.maps = malloc(sizeof(char *) * (cube->map.height + 1));
+	cube->map.maps = ft_calloc(sizeof(char *) * (cube->map.height + 1),1);
 	if (!cube->map.maps)
 		return (1);
 	i = 0;
 	while (i < cube->map.height)
 	{
         k = ft_strlen(cube->lines[j]);
-        //printf("%d\n",k);
-		cube->map.maps[i] = malloc(k + 1);
+		cube->map.maps[i] = ft_calloc(k + 1, 1);
 		if (!cube->map.maps[i])
 			return (1);
 		i++;
@@ -560,10 +554,12 @@ static void	fill_map(t_cube *cube, int i)
 {
 	int	j;
 	int	k;
+    int l;
 
 	j = 0;
 	k = cube->map.map_start + i;
-	while (j < cube->map.width)
+    l = ft_strlen(cube->lines[k]);
+	while (j < l)
 	{
 		if (cube->lines[k][j]
 			&& cube->lines[k][j] != '\n')
@@ -614,11 +610,6 @@ static int is_invalid(t_cube *cube, int i, int j)
     return 0;
 }
 
-static void handle_invalid_space(t_cube *cube)
-{
-    printf("wrong space place\n");
-    free_cube(cube);
-}
 
 static void process_space(t_cube *cube, int i, int j)
 {
@@ -626,19 +617,24 @@ static void process_space(t_cube *cube, int i, int j)
     {
         if (is_invalid(cube, i, j))
         {
-            handle_invalid_space(cube);
+            printf("wrong space place\n");
+            free_cube(cube);
         }
-        //cube->map.maps[i][j] = '1';
     }
 }
 
 static void handle_space(t_cube *cube)
 {
-    int i = 0;
+    int i;
+    int j;
+    int k;
+
+    i = 0;
     while (i < cube->map.height)
     {
-        int j = 0;
-        while (j < cube->map.width)
+        k = ft_strlen(cube->map.maps[i]);
+        j = 0;
+        while (j < k)
         {
             process_space(cube, i, j);
             j++;
@@ -691,7 +687,7 @@ static int	locate_player(t_cube *cube)
 	while (i < cube->map.height)
 	{
 		j = 0;
-		while (j < cube->map.width)
+		while (j < ft_strlen(cube->map.maps[i]))
 		{
 			
 			if (cube->map.maps[i][j] == 'N' || cube->map.maps[i][j] == 'S' || 
@@ -702,9 +698,9 @@ static int	locate_player(t_cube *cube)
 				cube->player.y = j;
 				cube->player.dir = cube->map.maps[i][j];
 			}
-			j++;
+            j++;
 		}
-		i++;
+        i++;
 	}
     if (player != 1)
         return 0;
@@ -734,8 +730,6 @@ static int handle_space_player(t_cube *cube)
 
 int map_check(t_cube *cube)
 {
-    //printf("%p\n",&cube->text.we);
-    fflush(stdout);
     if (up_down_check(cube))
     {
         
@@ -749,14 +743,12 @@ int map_check(t_cube *cube)
         fflush(stdout);
         free_cube(cube);
     }
-    printf("AAAAAAAAAAA\n");
-    fflush(stdout);
     if(!locate_player(cube))
     {
         printf("wrong amount of player");
+        fflush(stdout);
         free_cube(cube);
     }
-    
     if (handle_space_player(cube))
     {
         printf("player yanı boşluk");
@@ -783,7 +775,9 @@ void init_textures(t_cube *cube)
     cube->map.map_start=0;
     cube->map.height=0;
     cube->map.width=0;
-    // cube->lines = NULL;
+    cube->player.x = 0;
+	cube->player.y = 0;
+    //cube->lines = NULL;
     cube->map.maps = NULL;
     cube->text.colour = NULL;
 }
@@ -792,8 +786,23 @@ int zero_check(t_cube *cube)
 {
     if(!cube->text.no || !cube->text.so || !cube->text.we ||!cube->text.ea 
         ||(cube->text.f_check != 1 )||(cube->text.c_check != 1))
-
+    {  
+        printf("no:%s\n",cube->text.no);
+        printf("so:%s\n",cube->text.so);
+        printf("we:%s\n",cube->text.we);
+        printf("ea:%s\n",cube->text.ea);
+        printf("f:%d\n",cube->text.f_check);
+        printf("c:%d\n",cube->text.c_check);
+        fflush(stdout);
         return(1);
+    }
+    //else
+    //{
+    //     printf("ss--ss");
+    //     fflush(stdout);
+    // }
+    return 0;
+}
 //         if (!cube->text.no)
 //         {
 //             printf("no hatasi");
@@ -818,7 +827,6 @@ int zero_check(t_cube *cube)
 //     {
 
 //     }
-}
 
 int parser(t_cube *cube, char **argv)
 {
@@ -832,19 +840,11 @@ int parser(t_cube *cube, char **argv)
         printf("dosya okumayla ilgili hata");
         free_cube(cube);
     }
-    //int i = -1;
-    // while(cube->lines[++i])
-    // {
-    //     printf("%s",cube->lines[i]);
-    //     fflush(stdout);
-
-    // }
     init_textures(cube);
     int i = 0;
 
     while (cube->lines[i])
     {
-       // printf("LINE[%d]: [%s]\n", i, cube->lines[i]);
 
         if (is_maps_line(cube->lines[i]))
             break;
@@ -860,16 +860,17 @@ int parser(t_cube *cube, char **argv)
         }
         if (parse_colour(cube, cube->lines[i]))
         {
-            printf("renk hatası %d: %s\n", i + 1, cube->lines[i]);
+            //printf("renk hatası %d: %s\n", i + 1, cube->lines[i]);
             free_cube(cube);
         }
-        if (zero_check(cube))
-        {
-            printf("texture veya renk sayısı hatası\n");
-            free_cube(cube);
-        }
-
         i++;
+    }
+    printf("floor:%d\n",cube->text.floor);
+    
+    if (zero_check(cube))
+    {
+        printf("texture veya renk sayısı hatası\n");
+        free_cube(cube);
     }
     
     get_map(cube);
@@ -878,24 +879,22 @@ int parser(t_cube *cube, char **argv)
     {
         printf("haritayla ilgili hata");
         return 1;
-    }
-    
-        
+    } 
     return 0;
 }
 
-void    free_textures(t_cube *cube)
-{
-    if (cube->text.we)
-        free(cube->text.we);
-    if (cube->text.so)
-		free(cube->text.so);
-    if (cube->text.no)
-        free(cube->text.no);
-	if (cube->text.ea)
-		free(cube->text.ea);
-    return;
-}
+// void    free_textures(t_cube *cube)
+// {
+//     if (cube->text.we)
+//         free(cube->text.we);
+//     if (cube->text.so)
+// 		free(cube->text.so);
+//     if (cube->text.no)
+//         free(cube->text.no);
+// 	if (cube->text.ea)
+// 		free(cube->text.ea);
+//     return;
+// }
 
 
 
@@ -906,14 +905,15 @@ void	free_cube(t_cube *cube)
 {
     int	i;
     
-    if (cube->text.colour)
-	{
-        i = -1;
-		while (cube->text.colour[++i])
-            free(cube->text.colour[i]);
-		free(cube->text.colour);
-	}
+    // if (cube->text.colour)
+	// {
+    //     i = -1;
+	// 	while (cube->text.colour[++i])
+    //         free(cube->text.colour[i]);
+	// 	free(cube->text.colour);
+	// }
     
+    //printf("QQQ---QQQ\n");
 	if (cube->lines)
 	{
         i = -1;
@@ -921,7 +921,6 @@ void	free_cube(t_cube *cube)
             free(cube->lines[i]);
 		free(cube->lines);
 	}
-    
 	if (cube->map.maps)
 	{
         i = -1;
@@ -930,10 +929,18 @@ void	free_cube(t_cube *cube)
             while(cube->map.maps[i])
                 free(cube->map.maps[i++]);
         }
-            
-            free(cube->map.maps);
+        free(cube->map.maps);
     }
-    free_textures(cube);
+    printf("YYYY-------*****YYYY");
+    fflush(stdout);
+    if (cube->text.we)
+        free(cube->text.we);
+    if (cube->text.so)
+		free(cube->text.so);
+    if (cube->text.no)
+        free(cube->text.no);
+	if (cube->text.ea)
+		free(cube->text.ea);
     exit(1);
 }
 

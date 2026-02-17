@@ -2,7 +2,7 @@
 
 int colour_analysis(char **colour)
 {   
-    int value;
+    long long value;
     int i;
     int j;
     int k;

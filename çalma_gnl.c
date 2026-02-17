@@ -41,7 +41,7 @@ static char	*ft_strjoin_gnl(char *s1, char *s2)
 		return (NULL);
 	if (!s1)
 	{
-		result = malloc(ft_strlen_gnl(s2) + 1);
+		result = ft_calloc(ft_strlen_gnl(s2) + 1, 1);
 		if (!result)
 			return (NULL);
 		i = -1;
@@ -50,7 +50,7 @@ static char	*ft_strjoin_gnl(char *s1, char *s2)
 		result[i] = '\0';
 		return (result);
 	}
-	result = malloc(ft_strlen_gnl(s1) + ft_strlen_gnl(s2) + 1);
+	result = ft_calloc(ft_strlen_gnl(s1) + ft_strlen_gnl(s2) + 1, 1);
 	if (!result)
 		return (NULL);
 	i = -1;
