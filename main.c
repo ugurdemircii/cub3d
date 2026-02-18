@@ -955,5 +955,8 @@ int main(int argc, char **argv)
     if (parser(&cube, argv))
         //error
         return 1;
+     printf("%d %d",cube.player.x,cube.player.y);
+    //  exit(1);
+    render(&cube);
     return 0;
 }
