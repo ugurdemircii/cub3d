@@ -11,7 +11,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-// #include "a.h"
+#ifndef SCREENW
+# define SCREENW 1000
+#endif
+
+#ifndef SCREENH
+# define SCREENH 1000
+#endif
 
 typedef struct s_values
 {
@@ -41,6 +47,16 @@ typedef struct s_game
     double angle;
     void *mlx;
     void *win;
+    void *no;
+    void *so;
+    void *we;
+    void *ea;
+    int *no_data;
+    int *so_data;
+    int *we_data;
+    int *ea_data;
+    int tex_w;
+    int tex_h;
     char **map;
 }t_game;
 
@@ -98,6 +114,7 @@ int	ft_isspace(int c);
 void render(t_cube *cube);
 void raycast(t_cube *cube);
 void texture(t_game *game, t_values *values, int side, double perp_dist, int line_h, int start, int end, int x);
-void draw_ceil_floor(t_game *game, int x, int start, int end, int screen_h);
+void draw_ceil_floor(t_cube *cube, int x, int start, int end, int screen_h);
+void load_textures(t_cube *cube);
 
 #endif

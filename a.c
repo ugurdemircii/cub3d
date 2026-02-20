@@ -355,15 +355,35 @@ int key_hook(int keycode, void *param)
 }
 
 
+
+void set_dir(char dir, t_game *game)
+{
+    if (dir == 'E')
+    {
+        game->angle = 0.0;
+    }
+    else if (dir == 'S')
+    {
+        game->angle = M_PI / 2.0;
+    }
+    else if (dir == 'W')
+    {
+        game->angle = M_PI;
+    }
+    else
+    {
+        game->angle = 3.0 * M_PI / 2.0;
+    }
+}
+
+
 void render(t_cube *cube)
 {
-    // t_game game;
-
     double angle = M_PI / 8;
-    int win_x = 640;
-    int win_y = 448;
+    int win_x = SCREENW;
+    int win_y = SCREENH;
     void *mlx = mlx_init();
-    void *win = mlx_new_window(mlx, win_x, win_y, "cub3d");
+    void *win = mlx_new_window(mlx, SCREENW, SCREENH, "cub3d");
     cube->game = malloc(sizeof(t_game));
     cube->map.maps[4][2] = '0';
     cube->map.maps[cube->player.x][cube->player.y] = '0';
@@ -371,23 +391,19 @@ void render(t_cube *cube)
     cube->game->posy = cube->player.x * 64 + 32;
     cube->game->mlx = mlx;
     cube->game->win = win;
-    cube->game->angle = angle;
+    cube->game->tex_h = 64;
+    cube->game->tex_w = 64;
+    set_dir(cube->player.dir, cube->game);
+    load_textures(cube);
     cube->game->map = cube->map.maps;
     int i = 0;
-    printf("---------- %d   %d\n",cube->game->posx,cube->game->posy);
+    printf("---------- %d   %d char dir %c\n",cube->game->posx,cube->game->posy, cube->player.dir);
     printf("%d     %d\n",cube->player.x,cube->player.y);
     while (map[i])
     {
         printf("%s\n",cube->game->map[i]);
         i++;
     }
-    // exit(1);
-    // draw_ray(mlx, win, 145, 370, angle);
-    // draw_ray(mlx, win, 145, 370, M_PI / 6 - 0.3);
-    // draw_ray(mlx, win, 145, 370, M_PI / 6);
-    // draw_ray(mlx, win, 145, 370, M_PI / 6 + 0.3);
-    // multiple_ray(mlx, win, 145, 370, M_PI / 6);
-    // distances(145, 370, mlx, win, angle);
     raycast(cube);
     mlx_key_hook(win, key_hook, cube);
     mlx_loop(mlx);   

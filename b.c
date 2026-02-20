@@ -1,12 +1,15 @@
 // #include "a.h"
 #include "cub3d.h"
 
+
+
 void calc_values(t_cube *cube, int x, int width, t_values *values)
 {
     values->cam_x = 2 * x / (double)width - 1; 
    
     values->dir_x = cos(cube->game->angle);
     values->dir_y = sin(cube->game->angle);
+    // set_dir(cube->player.dir,values);
     values->plane_x = -sin(cube->game->angle) * 0.66;
     values->plane_y =  cos(cube->game->angle) * 0.66;
     values->raydir_x = values->dir_x + values->plane_x * values->cam_x;
@@ -37,13 +40,6 @@ void calc_values(t_cube *cube, int x, int width, t_values *values)
         values->step_y = 1;
         values->perp_y = (values->map_y + 1 - values->spos_y) * values->delta_y;
     }
-    // printf("%f\n",values->cam_x);
-    // printf("%f\n",values->plane_x);
-    // printf("%f\n",values->plane_y);
-    // printf("%f\n",values->dir_x);
-    // printf("%f\n",values->dir_y);
-    // printf("%f\n",values->raydir_x);
-    // printf("%f\n",values->raydir_y);
 }
 
 int dda_loop(t_values *values, t_game *game)
@@ -52,7 +48,6 @@ int dda_loop(t_values *values, t_game *game)
     int side;
 
     hit = 0;
-    printf("looop\n");
     while (hit == 0)
     {
         if (values->perp_x < values->perp_y) 
@@ -68,11 +63,7 @@ int dda_loop(t_values *values, t_game *game)
             side = 1;
         }
         if (game->map[values->map_y][values->map_x] == '1') 
-        {
-            printf("mapx %d mapy%d\n", values->map_x,values->map_y);
             hit = 1;
-            // exit(1);
-        }
     }
     return (side);
 }
@@ -97,7 +88,7 @@ void draw_line(t_game *game, int x, int start, int end)
     }
 }
 
-void set_line_h(double dist, int h, int x, t_game *game, t_values *values, int side)
+void set_line_h(double dist, int h, int x, t_cube *cube, t_values *values, int side)
 {
     int line_h;
     int start;
@@ -110,9 +101,8 @@ void set_line_h(double dist, int h, int x, t_game *game, t_values *values, int s
         start = 0;
     if (end > h)
         end = h;
-    texture(game, values, side, dist, line_h, start, end, x);
-    draw_ceil_floor(game, x, start, end, h);
-    // draw_line(game, x, start, end);
+    texture(cube->game, values, side, dist, line_h, start, end, x);
+    draw_ceil_floor(cube, x, start, end, h);
 }
 
 void raycast(t_cube *cube)
@@ -124,17 +114,15 @@ void raycast(t_cube *cube)
     double dist;
 
     x = 0;
-    w = 640;
-    h = 448;
+    w = SCREENW;
+    h = SCREENH;
     t_values values;
-    while (x < 640)
+    while (x < SCREENW)
     {
         calc_values(cube, x, w, &values);
-        printf("dda\n");
         side = dda_loop(&values, cube->game);
-        // exit(1);
         dist = perp_dist(values, side);
-        set_line_h(dist, h, x, cube->game, &values, side);
+        set_line_h(dist, h, x, cube, &values, side);
         x++;
     }
 }
