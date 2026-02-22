@@ -12,11 +12,11 @@
 # include <stdlib.h>
 
 #ifndef SCREENW
-# define SCREENW 1000
+# define SCREENW 800
 #endif
 
 #ifndef SCREENH
-# define SCREENH 1000
+# define SCREENH 800
 #endif
 
 typedef struct s_values
@@ -38,10 +38,20 @@ typedef struct s_values
     int map_y;
     int step_x;
     int step_y;
+    int line_h;
+    int start;
+    int end;
 }t_values;
 
 typedef struct s_game
 {
+
+    void    *img;          
+    int     *addr;
+    int     bits_per_pixel;
+    int     line_length;   
+    int     endian;        
+
     int posx;
     int posy;
     double angle;
@@ -113,8 +123,9 @@ void	free_cube(t_cube *cube);
 int	ft_isspace(int c);
 void render(t_cube *cube);
 void raycast(t_cube *cube);
-void texture(t_game *game, t_values *values, int side, double perp_dist, int line_h, int start, int end, int x);
-void draw_ceil_floor(t_cube *cube, int x, int start, int end, int screen_h);
+void texture(t_game *game, t_values *values, int *arr, double perp_dist);
+void draw_ceil_floor(t_cube *cube, int x, int start, int end);
 void load_textures(t_cube *cube);
+void start_raycasting(t_cube *cube);
 
 #endif

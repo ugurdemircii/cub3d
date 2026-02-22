@@ -1,20 +1,19 @@
-// #include "a.h"
 #include "cub3d.h"
 
-void draw_ceil_floor(t_cube *cube, int x, int start, int end, int screen_h)
+void draw_ceil_floor(t_cube *cube, int x, int start, int end)
 {
     int y;
 
     y = 0;
     while (y < start)
     {
-        mlx_pixel_put(cube->game->mlx, cube->game->win, x, y, cube->text.ceiling);
+        cube->game->addr[y * (cube->game->line_length / 4) + x] = cube->text.ceiling;
         y++;
     }
     y = end;
-    while (y < screen_h)
+    while (y < SCREENH)
     {
-        mlx_pixel_put(cube->game->mlx, cube->game->win, x, y, cube->text.floor);
+        cube->game->addr[y * (cube->game->line_length / 4) + x] = cube->text.floor;
         y++;
     }
 }
