@@ -14,15 +14,14 @@ int colour_analysis(char **colour)
         k = -1;
         while(colour[j][++k])
         {
-            if ((!ft_isdigit(colour[j][k])) &&( !ft_isspace(colour[j][k])))
-            {
-                //printf("atoiden önce hata\n");
-                exit(1);
-            }
+            if ((!ft_isdigit(colour[j][k])) && (!ft_isspace(colour[j][k])))
+                return (1);
         }
     }
     while (i < 3)
     {
+        if (colour[i][0] == '\n')
+            return 1;
         value = ft_atoi(colour[i]);
         if (value < 0 || value > 255)
             return 1;
@@ -74,30 +73,25 @@ int parse_colour(t_cube *cube, char *line)
 
     while (ft_isspace(line[++i]))
         ;
-    // printf("%d--\n",i);
     if ((line[i] == 'F' || line[i] == 'C') && ft_isspace(line[i + 1]))
     {
         trimmed = ft_strtrim(line + 1 + i, " ");
         cube->text.colour = ft_split(trimmed, ',');
         free(trimmed);
-        
-        // printf("colour%s--\n",colour[2]);
-        if (!cube->text.colour || !cube->text.colour[0] || !cube->text.colour[1] || !cube->text.colour[2] || cube->text.colour[3])
+        if (!cube->text.colour || !cube->text.colour[0] || !cube->text.colour[1] || !cube->text.colour[2] || cube->text.colour[2][0] == 10 || cube->text.colour[3])
         {
-            printf("eksik renk\n");
-            exit(1);
+            printf("eksik renk değişkeni\n");
+            free_cube(cube);
         }
         if (colour_analysis(cube->text.colour))
         {
             printf("wrong colour");
-            fflush(stdout);
-            return 1;
+            free_cube(cube);
         }
         if (line[i] == 'F')
         {
             cube->text.f_check++;
             cube->text.floor = add_colour(cube->text.colour);
-            //printf("%d--\n",cube->text.floor);
         }
         if (line[i] == 'C')
         {

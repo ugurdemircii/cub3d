@@ -31,6 +31,7 @@ typedef struct s_text
 typedef struct s_map
 {
     char    **maps;
+    char    **n_maps;
     int     width;
     int     height;
     int     map_start;

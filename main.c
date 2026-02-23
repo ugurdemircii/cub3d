@@ -9,40 +9,29 @@ char *texture_path(t_cube *cube, char *path, char *set)
     int i;
 
     i = -1;
-
     trim = ft_strtrim(path, set);
+
     if (!trim)
-    return NULL;
-    
-    // line = ft_strtrim(trim, " ");
+        return NULL;
     while (ft_isspace(trim[++i]))
         ;
     line = ft_strdup(trim + i);
-
     free(trim);
     if (!line)
         return NULL;
-
-    // remove trailing newline
     len = ft_strlen(line);
     if (len > 0 && line[len - 1] == '\n')
     {
         line[len - 1] = '\0';
         len--;
     }
-
-    // check extension
-    if (len < 4 ||
-        line[len - 4] != '.' ||
-        line[len - 3] != 'x' ||
-        line[len - 2] != 'p' ||
-        line[len - 1] != 'm')
+    if (len < 4 || line[len - 4] != '.' || line[len - 3] != 'x' ||
+        line[len - 2] != 'p' || line[len - 1] != 'm')
     {
         printf("Invalid texture: [%s]\n", line);
         free(line);
         return NULL;
     }
-
     return line;
 }
 
@@ -54,15 +43,6 @@ int texture_check(t_cube *cube,char *line)
     i = -1;
     if (!line)
         return (1);
-
-    // // Skip leading whitespace
-    // l = line;
-    // while (*l == ' ' || *l == '\t')
-    //     l++;
-
-    // // Skip empty lines
-    // if (*l == '\0' || *l == '\n')
-    //     return (0);
 
     while (ft_isspace(line[++i]))
         ;
@@ -137,7 +117,12 @@ static int	is_maps_line(char *line)
 	int	w;
 
 	if (!line || *line == '\0')
+    {
+        printf("ggg***\n");
+        fflush(stdout);
 		return (0);
+
+    }
 
 	i = 0;
 	w = 0;
@@ -171,7 +156,6 @@ void    count_map_height(t_cube *cube)
 			break ;
 		i++;
 	}
-
 	cube->map.height = height;
 }
 
@@ -282,15 +266,11 @@ int read_lines(t_cube *cube, char *path)
     if (!i)
     {
         printf("dosya boş");
-        return (1);
+        exit(1);
     }
-
     cube->lines = ft_calloc(sizeof(char *)* (i + 1), 1);
-
     if (!cube->lines)
         return 1;
-
-
     fd = open(path,O_RDONLY);
     i = 0;
     while((line = get_next_line(fd))!=NULL)
@@ -311,10 +291,11 @@ int is_valid_map_char(char c)
 
 int is_map_line(char *line)
 {
-    int i = 0;
-    int has_wall = 0;
+    int i;
+    int has_wall;
 
-    // skip leading spaces
+    i = 0;
+    has_wall = 0;
     while (line[i] == ' ')
         i++;
 
@@ -326,7 +307,6 @@ int is_map_line(char *line)
             has_wall = 1;
         i++;
     }
-    //printf("%s  duvar: %d\n",line,has_wall);
     return has_wall;
 }
 
@@ -336,7 +316,6 @@ void find_map_start(t_cube *cube)
 
     while (cube->lines[i])
     {
-        //printf("%s\n",cube->lines[i]);
         if (is_map_line(cube->lines[i]))
         {
             cube->map.map_start = i;
@@ -344,75 +323,13 @@ void find_map_start(t_cube *cube)
         }
         i++;
     }
-    printf("no map\n");
-    free_cube(cube);
+    if (cube->map.map_start == 0)
+    {
+        printf("no map\n");
+        fflush(stdout);
+        free_cube(cube);
+    }
 }
-
-// void find_map_start(t_cube *cube)
-// {
-//     int i = 0;
-//     int j;
-
-//     while (cube->lines[i])
-//     {
-//         j = 0;
-//         int wall = 0;
-
-//         while (cube->lines[i][j] && cube->lines[i][j] != '\n')
-//         {
-//             if (!is_valid_map_char(cube->lines[i][j]))
-//                 break;
-            
-//             if (cube->lines[i][j] == '1')
-//                 wall = 1;
-//             j++;
-//         }
-//         if (wall && cube->lines[i][j] == '\0')
-//         {
-//             printf("%s",cube->lines[i]);
-//             cube->map.map_start = i;
-//             return;
-//         }
-//         i++;
-//     }
-
-//     printf("no map\n");
-//     free_cube(cube);
-// }
-
-
-// static int	space_check(t_cube *cube, int i, int j)
-// {
-// 	if (i == 0 || i == cube->map.height - 1)
-// 		return (1);
-// 	if (j == 0 || j == cube->map.width - 1)
-// 		return (1);
-// 	if (cube->map.maps[i - 1][j] == ' ' ||cube->map.maps[i + 1][j] == ' '
-//         || cube->map.maps[i][j - 1] == ' ' || cube->map.maps[i][j + 1] == ' ')
-// 		return (1);
-// 	return (0);
-// }
-
-// static int	check_sides(t_cube *cube)
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i = 0;
-// 	while (i < cube->map.height)
-// 	{
-// 		j = 0;
-// 		while (j < cube->map.width)
-// 		{
-// 			if (is_char(cube->map.maps[i][j])
-// 				&& space_check(cube, i, j))
-// 				return (1);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	return (0);
-// }
 
 static int space_check(t_cube *cube, int i, int j)
 {
@@ -467,42 +384,28 @@ static int	check_sides(t_cube *cube)
 	return (0);
 }
 
-
-// static int check_sides(t_cube *cube)
+// static int	map_alloc(t_cube *cube)
 // {
-//     int i;
+// 	int	i;
 //     int j;
 //     int k;
-//     int len;
 
-//     i = 0;
-//     k = -1;
-//     while(++k < cube->map.height - 1)
-//     {
-//         len = ft_strlen(cube->map.maps[k]);
-//     }
-//     while (i < cube->map.width)
-//     {
-
-//         if (space_check(cube, 0, i))
-//             return (1);
-//         if (space_check(cube, cube->map.height - 1, i))
-//             return (1);
-//         i++;
-//     }
-
-
-//     j = 1; 
-//     while (j < cube->map.height - 1)
-//     {
-//         if (space_check(cube, j, 0))
-//             return (1);
-//         if (space_check(cube, j, cube->map.width - 1)) 
-//             return (1);
+//     j = cube->map.map_start;
+// 	cube->map.maps = ft_calloc(sizeof(char *) * (cube->map.height + 1),1);
+// 	if (!cube->map.maps)
+// 		return (1);
+// 	i = 0;
+// 	while (i < cube->map.height)
+// 	{
+//         k = ft_strlen(cube->lines[j]);
+// 		cube->map.maps[i] = ft_calloc(k + 1, 1);
+// 		if (!cube->map.maps[i])
+// 			return (1);
+// 		i++;
 //         j++;
-//     }
-
-//     return (0); 
+// 	}
+// 	cube->map.maps[i] = NULL;
+// 	return (0);
 // }
 
 static int	map_alloc(t_cube *cube)
@@ -513,42 +416,41 @@ static int	map_alloc(t_cube *cube)
 
     j = cube->map.map_start;
 	cube->map.maps = ft_calloc(sizeof(char *) * (cube->map.height + 1),1);
-	if (!cube->map.maps)
+    cube->map.n_maps = ft_calloc(sizeof(char *) * (cube->map.height + 1),1);
+	if (!cube->map.maps || !cube->map.n_maps)
 		return (1);
 	i = 0;
 	while (i < cube->map.height)
 	{
         k = ft_strlen(cube->lines[j]);
 		cube->map.maps[i] = ft_calloc(k + 1, 1);
-		if (!cube->map.maps[i])
+        cube->map.n_maps[i] = ft_calloc(k + 1, 1);
+		if (!cube->map.maps[i] || !cube->map.n_maps[i])
 			return (1);
 		i++;
         j++;
 	}
 	cube->map.maps[i] = NULL;
+    cube->map.n_maps[i] = NULL;
 	return (0);
 }
+static void	fill_map_n(t_cube *cube, int i)
+{
+	int	j;
+	int	k;
+    int l;
 
-// static void fill_map(t_cube *cube, int i)
-// {
-//     int j = 0;
-//     int k = cube->map.map_start + i;
-//     int len = ft_strlen(cube->lines[k]);
-
-//     // Remove trailing newline
-//     if (len > 0 && cube->lines[k][len - 1] == '\n')
-//         len--;
-
-//     while (j < cube->map.width)
-//     {
-//         if (j < len)
-//             cube->map.maps[i][j] = cube->lines[k][j];
-//         else
-//             cube->map.maps[i][j] = ' ';
-//         j++;
-//     }
-//     cube->map.maps[i][j] = '\0';
-// }
+	j = 0;
+	k = cube->map.map_start + i;
+    l = ft_strlen(cube->lines[k]);
+	while (j < l)
+	{
+		if (cube->lines[k][j])
+			cube->map.n_maps[i][j] = cube->lines[k][j];
+		j++;
+	}
+	cube->map.n_maps[i][j] = '\0';
+}
 
 static void	fill_map(t_cube *cube, int i)
 {
@@ -573,27 +475,20 @@ static void	fill_map(t_cube *cube, int i)
 
 static int	get_map(t_cube *cube)
 {
-
-	int	i;
+    int	i;
     find_map_start(cube);
-    // printf("start:%d\n",cube->map.map_start);
-    // fflush(stdout);
     count_map_height(cube);
-    // printf("heigth:%d\n",cube->map.height);
-    // fflush(stdout);
     count_map_width(cube);
 	if (map_alloc(cube))
-		return (1);
-
-    
+    return (1);
 	i = -1;
 	while (++i < cube->map.height)
         fill_map(cube, i);
-    // int j= -1;
-    // while(cube->map.maps[++j])
-    //     printf("%s\n",cube->map.maps[j]);
-
-    //printf("%d---",cube->map.height);
+    i = -1;
+    while (++i < cube->map.height)
+        fill_map_n(cube, i);
+    printf("VVVV***");
+    fflush(stdout);
 	return (0);
 }
 static int is_invalid(t_cube *cube, int i, int j)
@@ -609,13 +504,40 @@ static int is_invalid(t_cube *cube, int i, int j)
     
     return 0;
 }
+static int is_invalid_zero(char **map, int height, int i, int j)
+{
+    // check UP
+    if (i - 1 < 0 || map[i - 1][j] == '\0' || map[i - 1][j] == ' ')
+        return (1);
 
+    // check DOWN
+    if (i + 1 >= height || map[i + 1][j] == '\0' || map[i + 1][j] == ' ')
+        return (1);
+
+    // check LEFT
+    if (j - 1 < 0 || map[i][j - 1] == '\0' || map[i][j - 1] == ' ')
+        return (1);
+
+    // check RIGHT
+    if (map[i][j + 1] == '\0' || map[i][j + 1] == ' ')
+        return (1);
+
+    return (0);
+}
 
 static void process_space(t_cube *cube, int i, int j)
 {
     if (cube->map.maps[i][j] == ' ')
     {
         if (is_invalid(cube, i, j))
+        {
+            printf("wrong space place\n");
+            free_cube(cube);
+        }
+    }
+    if (cube->map.maps[i][j] == '0')
+    {
+        if (is_invalid_zero(cube->map.maps,cube->map.height, i, j))
         {
             printf("wrong space place\n");
             free_cube(cube);
@@ -643,39 +565,6 @@ static void handle_space(t_cube *cube)
     }
 }
 
-
-// static void handle_space(t_cube *cube)
-// {
-//     int i;
-//     int j;
-
-//     i = 0;
-//     while (i < cube->map.height)
-//     {
-//         j = 0;
-//         while(j < cube->map.width)
-//         {
-//             if (cube->map.maps[i][j] == ' ')
-//             {
-//                 if (cube->map.maps[i+1][j] == '0' || cube->map.maps[i-1][j] == '0'
-//                 || cube->map.maps[i][j+1] == '0' || cube->map.maps[i][j-1] == '0')
-//                 {
-//                     printf("wrong space place");
-//                     free_cube(cube);
-//                 }
-//                 else
-//                 {
-//                     cube->map.maps[i][j] = '1';
-//                 }
-//             }
-//             j++;
-//         }
-//         i++;
-//     }
-    
-// }
-
-
 static int	locate_player(t_cube *cube)
 {
 	int	i;
@@ -702,51 +591,76 @@ static int	locate_player(t_cube *cube)
 		}
         i++;
 	}
+    printf("oyuncu:%d\n",player);
     if (player != 1)
         return 0;
 	return (player);
 }
 static int handle_space_player(t_cube *cube)
 {
-    int x = cube->player.x;
-    int y = cube->player.y;
-    printf("%d\n",x);
-    printf("%d\n",y);
-    if (x > 0 && cube->map.maps[x - 1][y] == ' ')
+    int x;
+    int y;
+
+    x = cube->player.x;
+    y = cube->player.y;
+    if (x > 0 && (cube->map.n_maps[x - 1][y] == ' ' || cube->map.n_maps[x - 1][y] == '\n'))
         return (1);
 
-    if (x < cube->map.height - 1 && cube->map.maps[x + 1][y] == ' ')
+    if (x < cube->map.height - 1 && (cube->map.n_maps[x + 1][y] == ' ' || cube->map.n_maps[x + 1][y] == '\n' ))
         return (1);
 
-    if (y > 0 && cube->map.maps[x][y - 1] == ' ')
+    if (y > 0 && (cube->map.n_maps[x][y - 1] == ' ' || cube->map.n_maps[x][y - 1] == '\n' ))
         return (1);
 
-    if (y < cube->map.width - 1 && cube->map.maps[x][y + 1] == ' ')
+    if (y < cube->map.width - 1 && (cube->map.n_maps[x][y + 1] == ' ' || cube->map.n_maps[x][y + 1] == '\n' ))
         return (1);
 
     return (0); 
 }
+int check_map_after(t_cube *cube)
+{
+    int i;
+    int j;
 
+    i = cube->map.map_start + cube->map.height;
+    while(cube->lines[i])
+    {
+        printf("NNN***\n");
+        fflush(stdout);
+        j = 0;
+        while(cube->lines[i][j])
+        {
+            if (cube->lines[i][j] != ' ' && cube->lines[i][j] != '\t'
+				&& cube->lines[i][j] != '\r' && cube->lines[i][j] != '\n'
+				&& cube->lines[i][j] != '\v' && cube->lines[i][j] != '\f')
+                return (1);
+            j++;
+        }
+        i++;
+    }
+    return(0);
+}
 
 int map_check(t_cube *cube)
 {
+    if (check_map_after(cube))
+    {
+        printf("stuff after map");
+        free_cube(cube);
+    }
     if (up_down_check(cube))
     {
-        
         printf("harita geçerlilikle ilgili hata");
-        fflush(stdout);
         free_cube(cube);
     }
     if (check_sides(cube))
     {
         printf("check sides ilgili hata");
-        fflush(stdout);
         free_cube(cube);
     }
     if(!locate_player(cube))
     {
         printf("wrong amount of player");
-        fflush(stdout);
         free_cube(cube);
     }
     if (handle_space_player(cube))
@@ -755,10 +669,11 @@ int map_check(t_cube *cube)
         free_cube(cube);
     }
     handle_space(cube);
-    int j= -1;
+    int j;
+
+    j= -1;
     while(cube->map.maps[++j])
         printf("%s\n",cube->map.maps[j]);
-
     return 0;
 }
 
@@ -779,6 +694,7 @@ void init_textures(t_cube *cube)
 	cube->player.y = 0;
     //cube->lines = NULL;
     cube->map.maps = NULL;
+    cube->map.n_maps = NULL;
     cube->text.colour = NULL;
 }
 
@@ -786,47 +702,9 @@ int zero_check(t_cube *cube)
 {
     if(!cube->text.no || !cube->text.so || !cube->text.we ||!cube->text.ea 
         ||(cube->text.f_check != 1 )||(cube->text.c_check != 1))
-    {  
-        printf("no:%s\n",cube->text.no);
-        printf("so:%s\n",cube->text.so);
-        printf("we:%s\n",cube->text.we);
-        printf("ea:%s\n",cube->text.ea);
-        printf("f:%d\n",cube->text.f_check);
-        printf("c:%d\n",cube->text.c_check);
-        fflush(stdout);
         return(1);
-    }
-    //else
-    //{
-    //     printf("ss--ss");
-    //     fflush(stdout);
-    // }
     return 0;
 }
-//         if (!cube->text.no)
-//         {
-//             printf("no hatasi");
-//         }
-//     if (!cube->text.so)
-//     {
-//         printf("so hatasi");
-//     }
-//     if (!cube->text.we)
-//     {
-//         printf("we hatasi");
-//     }
-//     if (!cube->text.ea)
-//     {
-//         printf("ea hatasi");
-//     }
-//     if (!cube->text.f)
-//     {
-
-//     }
-//     if (!cube->text.no)
-//     {
-
-//     }
 
 int parser(t_cube *cube, char **argv)
 {
@@ -840,6 +718,8 @@ int parser(t_cube *cube, char **argv)
         printf("dosya okumayla ilgili hata");
         free_cube(cube);
     }
+    printf("YARDIM\n");
+    fflush(stdout);
     init_textures(cube);
     int i = 0;
 
@@ -859,13 +739,11 @@ int parser(t_cube *cube, char **argv)
             free_cube(cube);
         }
         if (parse_colour(cube, cube->lines[i]))
-        {
-            //printf("renk hatası %d: %s\n", i + 1, cube->lines[i]);
+        {          
             free_cube(cube);
         }
         i++;
     }
-    printf("floor:%d\n",cube->text.floor);
     
     if (zero_check(cube))
     {
@@ -873,7 +751,9 @@ int parser(t_cube *cube, char **argv)
         free_cube(cube);
     }
     
+    
     get_map(cube);
+
 
     if (map_check(cube))
     {
@@ -883,37 +763,73 @@ int parser(t_cube *cube, char **argv)
     return 0;
 }
 
-// void    free_textures(t_cube *cube)
+
+// int parser_two(t_cube *cube, char **argv)
 // {
-//     if (cube->text.we)
-//         free(cube->text.we);
-//     if (cube->text.so)
-// 		free(cube->text.so);
-//     if (cube->text.no)
-//         free(cube->text.no);
-// 	if (cube->text.ea)
-// 		free(cube->text.ea);
-//     return;
+//     int i;
+
+//     i = -1;
+//     while(cube->lines[++i])
+//     {
+//         if (is_maps_line(cube->lines[i]))
+//             br;
+//         if (cube->lines[i][0] == '\0')
+//         {
+//             i++;
+//             continue;
+//         }
+//         if (texture_check(cube, cube->lines[i]))
+//         {
+//             printf("Texture hatası\n");
+//             free_cube(cube);
+//         }
+//         if (parse_colour(cube, cube->lines[i]))
+//             free_cube(cube);
+//     }
+// }
+// int parser(t_cube *cube, char **argv)
+// {
+//     if (check_path(cube,argv[1]))
+//     {
+//         printf("dosyayla ilgili hata");
+//         return(1);
+//     }
+//     if (read_lines(cube, argv[1]))
+//     {
+//         printf("dosya okumayla ilgili hata");
+//         free_cube(cube);
+//     }
+//     init_textures(cube);
+//     parser_two(cube, argv);
+//     if (zero_check(cube))
+//     {
+//         printf("texture veya renk sayısı hatası\n");
+//         free_cube(cube);
+//     }
+//     get_map(cube);
+//     map_check(cube);
+//     return 0;
 // }
 
 
-
-
+void free_textures(t_cube *cube)
+{
+    if (cube->text.we)
+        free(cube->text.we);
+    if (cube->text.so)
+		free(cube->text.so);
+    if (cube->text.no)
+        free(cube->text.no);
+	if (cube->text.ea)
+		free(cube->text.ea);
+    return ;
+}
 
 
 void	free_cube(t_cube *cube)
 {
     int	i;
-    
-    // if (cube->text.colour)
-	// {
-    //     i = -1;
-	// 	while (cube->text.colour[++i])
-    //         free(cube->text.colour[i]);
-	// 	free(cube->text.colour);
-	// }
-    
-    //printf("QQQ---QQQ\n");
+
 	if (cube->lines)
 	{
         i = -1;
@@ -931,16 +847,17 @@ void	free_cube(t_cube *cube)
         }
         free(cube->map.maps);
     }
-    printf("YYYY-------*****YYYY");
-    fflush(stdout);
-    if (cube->text.we)
-        free(cube->text.we);
-    if (cube->text.so)
-		free(cube->text.so);
-    if (cube->text.no)
-        free(cube->text.no);
-	if (cube->text.ea)
-		free(cube->text.ea);
+    if (cube->map.n_maps)
+	{
+        i = -1;
+		if (cube->map.n_maps[++i])
+        {
+            while(cube->map.n_maps[i])
+                free(cube->map.n_maps[i++]);
+        }
+        free(cube->map.n_maps);
+    }
+    free_textures(cube);
     exit(1);
 }
 
