@@ -1,8 +1,10 @@
 NAME = cub3d
 
 CC = cc
-CFLAGS =
-SRC = main.c color.c get_next_line.c
+CFLAGS = #-Wall -Wextra -Werror 
+SRC = main.c color.c get_next_line.c free.c map_check.c \
+		texture.c utils.c file_check.c map.c \
+		space_check.c 
 OBJ = $(SRC:.c=.o)
 
 

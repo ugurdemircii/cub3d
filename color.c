@@ -79,15 +79,10 @@ int parse_colour(t_cube *cube, char *line)
         cube->text.colour = ft_split(trimmed, ',');
         free(trimmed);
         if (!cube->text.colour || !cube->text.colour[0] || !cube->text.colour[1] || !cube->text.colour[2] || cube->text.colour[2][0] == 10 || cube->text.colour[3])
-        {
-            printf("eksik renk değişkeni\n");
-            free_cube(cube);
-        }
+            free_cube(cube, "Missing colour part");
+
         if (colour_analysis(cube->text.colour))
-        {
-            printf("wrong colour");
-            free_cube(cube);
-        }
+            free_cube(cube, "Invalid rgb value");
         if (line[i] == 'F')
         {
             cube->text.f_check++;

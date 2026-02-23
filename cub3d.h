@@ -57,7 +57,27 @@ typedef struct s_cube
 char	*get_next_line(int fd);
 char	*ft_strtrim(char const *s1, char const *set);
 int     parse_colour(t_cube *cube, char *line);
-void	free_cube(t_cube *cube);
-int	ft_isspace(int c);
-
+int     ft_isspace(int c);
+void	free_cube(t_cube *cube, char *msg);
+int     check_map_after(t_cube *cube);
+int     up_down_check(t_cube *cube);
+int	check_sides(t_cube *cube);
+int	locate_player(t_cube *cube);
+int texture_check(t_cube *cube,char *line);
+int check_path(t_cube *cube, char *path);
+void read_lines(t_cube *cube, char *path);
+int	is_valid(char c);
+int	is_char(char c);
+int	is_maps_line(char *line);
+int is_map_line(char *line);
+void    count_map_height(t_cube *cube);
+void	count_map_width(t_cube *cube);
+void	fill_map_n(t_cube *cube, int i);
+void	fill_map(t_cube *cube, int i);
+int	map_alloc(t_cube *cube);
+int handle_space_player(t_cube *cube);
+void handle_space(t_cube *cube);
+int zero_check(t_cube *cube);
+void init_textures(t_cube *cube);
+void find_map_start(t_cube *cube);
 #endif
