@@ -46,12 +46,17 @@ typedef struct s_values
 typedef struct s_game
 {
 
+    int w_key;
+    int a_key;
+    int s_key;
+    int d_key;
+    int left_key;
+    int right_key;
     void    *img;          
     int     *addr;
     int     bits_per_pixel;
     int     line_length;   
-    int     endian;        
-
+    int     endian;  
     int posx;
     int posy;
     double angle;
@@ -127,5 +132,15 @@ void texture(t_game *game, t_values *values, int *arr, double perp_dist);
 void draw_ceil_floor(t_cube *cube, int x, int start, int end);
 void load_textures(t_cube *cube);
 void start_raycasting(t_cube *cube);
-
+int key_press(int keycode, t_cube *cube);
+int key_release(int keycode, t_cube *cube);
+int handle_player_move(t_cube *cube);
+int handle_player_rotate(t_cube *cube);
+int game_loop(t_cube *cube);
+void move_backward(t_game *game);
+void move_forward(t_game *game);
+void move_left(t_game *game);
+void move_right(t_game *game);
+void rotate_right(t_game *game);
+void rotate_left(t_game *game);
 #endif

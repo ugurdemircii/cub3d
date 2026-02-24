@@ -1,8 +1,8 @@
-NAME = cub3d
+NAME = cub3D
 
 CC = cc
 CFLAGS =
-SRC = a.c b.c texture.c  main.c çalma_gnl.c ceil.c color.c
+SRC = a.c b.c texture.c  main.c çalma_gnl.c ceil.c color.c key_loop_control.c movement.c rotate.c
 OBJ = $(SRC:.c=.o)
 
 MLX = -framework OpenGL -framework AppKit -lmlx
