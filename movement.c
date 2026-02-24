@@ -5,11 +5,12 @@ int is_wall(double x, double y, char **map)
 {
     int mapx = (int)((x) / 64);
     int mapy = (int)((y) / 64);
-
+    
     if (map[mapy][mapx] == '1')
-        return 1;
+    return 1;
     return 0;
 }
+
 
 void move_backward(t_game *game)
 {

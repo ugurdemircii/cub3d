@@ -25,7 +25,7 @@ void load_textures(t_cube *cube)
     cube->game->ea_data = (int *)mlx_get_data_addr(cube->game->ea, &bpp, &size_line, &endian);
 }
 
-void draw_texture_line(t_game *game, int *tex_data, int x, int *limits)
+void draw_texture_line(t_game *game, int *tex_data, int x, t_values *values)
 {
     int		y;
     int		index;
@@ -33,14 +33,14 @@ void draw_texture_line(t_game *game, int *tex_data, int x, int *limits)
     double	step;
     double	tex_pos;
 
-    y = limits[0];
-    step = 64.0 / limits[2];
-    tex_pos = (limits[0] - SCREENH / 2 + limits[2] / 2) * step;
-    while (y < limits[1])
+    y = values->start;
+    step = 64.0 / values->line_h;
+    tex_pos = (values->start - SCREENH / 2 + values->line_h / 2) * step;
+    while (y < values->end)
     {
         index = (int)tex_pos % 64;
         tex_pos += step;
-        color = tex_data[64 * index + limits[3]];
+        color = tex_data[64 * index + values->selected_x];
         game->addr[y * (game->line_length / 4) + x] = color;
         y++;
     }
@@ -60,26 +60,21 @@ int *get_current_texture(t_game *game, t_values *values, int side)
 }
 
 
-void texture(t_game *game, t_values *values, int *arr, double perp_dist)
+void texture(t_game *game, t_values *values, double perp_dist)
 {
     double	hit_point;
     int		selected_x;
     int		*current_text;
-    int		limits[5];
 
-    current_text = get_current_texture(game, values, arr[0]);
-    if (arr[0] == 0)
+    current_text = get_current_texture(game, values, values->side);
+    if (values->side == 0)
         hit_point = values->spos_y + perp_dist * values->raydir_y;
     else
         hit_point = values->spos_x + perp_dist * values->raydir_x;
     hit_point -= floor(hit_point);
     selected_x = (int)(hit_point * 64.0);
-    if ((arr[0] == 0 && values->raydir_x < 0) || (arr[0] == 1 && values->raydir_y > 0))
+    if ((values->side == 0 && values->raydir_x < 0) || (values->side == 1 && values->raydir_y > 0))
         selected_x = 64 - selected_x - 1;
-    limits[0] = values->start;
-    limits[1] = values->end;
-    limits[2] = values->line_h;
-    limits[3] = selected_x % 64;
-    limits[4] = arr[0];
-    draw_texture_line(game, current_text, arr[1], limits);
+    values->selected_x = selected_x % 64;
+    draw_texture_line(game, current_text, values->x, values);
 }

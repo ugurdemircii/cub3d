@@ -82,7 +82,7 @@ double perp_dist(t_values values, int side)
     return (perp_dist);
 }
 
-void set_line_h(int *arr, t_cube *cube, t_values *values, double dist)
+void set_line_h(t_cube *cube, t_values *values, double dist)
 {
     values->line_h = (int)(SCREENH / dist);
     values->start = -values->line_h / 2 + SCREENH / 2;
@@ -91,27 +91,24 @@ void set_line_h(int *arr, t_cube *cube, t_values *values, double dist)
         values->start = 0;
     if (values->end > SCREENH)
         values->end = SCREENH;
-    texture(cube->game, values, arr, dist);
-    draw_ceil_floor(cube, arr[1], values->start, values->end);
+    texture(cube->game, values, dist);
+    draw_ceil_floor(cube, values->x, values->start, values->end);
 }
 
 void raycast(t_cube *cube)
 {
     int x;
-    int side;
     double dist;
     t_values values;
-    int arr[2];
 
     x = 0;
     while (x < SCREENW)
     {
         calc_values(cube, x, &values);
-        side = dda_loop(&values, cube->game);
-        dist = perp_dist(values, side);
-        arr[0] = side; 
-        arr[1] = x;
-        set_line_h(arr, cube, &values, dist);
+        values.side = dda_loop(&values, cube->game);
+        dist = perp_dist(values, values.side);
+        values.x = x; 
+        set_line_h(cube, &values, dist);
         x++;
     }
 }

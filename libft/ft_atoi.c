@@ -24,7 +24,7 @@ static	int	check_sign(char c, int *i)
 	return (sign);
 }
 
-long long	ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	long long	result;
 	int			sign;
