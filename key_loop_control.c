@@ -2,17 +2,17 @@
 
 int key_press(int keycode, t_cube *cube)
 {
-    if (keycode == 13)
+    if (keycode == 119)
         cube->game->w_key = 1;
-    if (keycode == 0)
+    if (keycode == 97)
         cube->game->a_key = 1;
-    if (keycode == 1)
+    if (keycode == 115)
         cube->game->s_key = 1;
-    if (keycode == 2)
+    if (keycode == 100)
         cube->game->d_key = 1;
-    if (keycode == 123)
+    if (keycode == 65361)
         cube->game->left_key = 1;
-    if (keycode == 124)
+    if (keycode == 65363)
         cube->game->right_key = 1;
     if (keycode == 53)
         exit(0);
@@ -21,17 +21,19 @@ int key_press(int keycode, t_cube *cube)
 
 int key_release(int keycode, t_cube *cube)
 {
-    if (keycode == 13)
+    printf("released: %d\n", keycode);
+    // exit(1);
+    if (keycode == 119)
         cube->game->w_key = 0;
-    if (keycode == 0)
+    if (keycode == 97)
         cube->game->a_key = 0;
-    if (keycode == 1)
+    if (keycode == 115)
         cube->game->s_key = 0;
-    if (keycode == 2)
+    if (keycode == 100)
         cube->game->d_key = 0;
-    if (keycode == 123)
+    if (keycode == 65361)
         cube->game->left_key = 0;
-    if (keycode == 124)
+    if (keycode == 65363)
         cube->game->right_key = 0;
     return (0);
 }

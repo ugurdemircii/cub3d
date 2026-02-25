@@ -65,40 +65,74 @@ int up_down_check(t_cube *cube)
 	return (0);
 }
 
-int	check_sides(t_cube *cube)
+static int	check_row(t_cube *cube, int row)
 {
 	int	i;
 	int	len;
 
 	i = 0;
-	len = ft_strlen(cube->map.maps[0]);
+	len = ft_strlen(cube->map.maps[row]);
 	while (i < len)
 	{
-		if (space_check(cube, 0, i))
-			return (1);
-		i++;
-	}
-	i = 0;
-	len = ft_strlen(cube->map.maps[cube->map.height - 1]);
-	while (i < len)
-	{
-		if (space_check(cube,
-				cube->map.height - 1, i))
-			return (1);
-		i++;
-	}
-	i = 1;
-	while (i < cube->map.height - 1)
-	{
-		len = ft_strlen(cube->map.maps[i]);
-		if (space_check(cube, i, 0))
-			return (1);
-		if (space_check(cube, i, len - 1))
+		if (space_check(cube, row, i))
 			return (1);
 		i++;
 	}
 	return (0);
 }
+
+int	check_sides(t_cube *cube)
+{
+	int	i;
+	int	len;
+
+	if (check_row(cube, 0) || check_row(cube, cube->map.height - 1))
+		return (1);
+	i = 1;
+	while (i < cube->map.height - 1)
+	{
+		len = ft_strlen(cube->map.maps[i]);
+		if (space_check(cube, i, 0) || space_check(cube, i, len - 1))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+// int	check_sides(t_cube *cube)
+// {
+// 	int	i;
+// 	int	len;
+
+// 	i = 0;
+// 	len = ft_strlen(cube->map.maps[0]);
+// 	while (i < len)
+// 	{
+// 		if (space_check(cube, 0, i))
+// 			return (1);
+// 		i++;
+// 	}
+// 	i = 0;
+// 	len = ft_strlen(cube->map.maps[cube->map.height - 1]);
+// 	while (i < len)
+// 	{
+// 		if (space_check(cube,
+// 				cube->map.height - 1, i))
+// 			return (1);
+// 		i++;
+// 	}
+// 	i = 1;
+// 	while (i < cube->map.height - 1)
+// 	{
+// 		len = ft_strlen(cube->map.maps[i]);
+// 		if (space_check(cube, i, 0))
+// 			return (1);
+// 		if (space_check(cube, i, len - 1))
+// 			return (1);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 int	locate_player(t_cube *cube)
 {

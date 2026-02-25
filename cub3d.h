@@ -61,8 +61,8 @@ typedef struct s_game
     int     bits_per_pixel;
     int     line_length;   
     int     endian;  
-    int posx;
-    int posy;
+    double posx;
+    double posy;
     double angle;
     void *mlx;
     void *win;

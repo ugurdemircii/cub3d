@@ -19,6 +19,7 @@ void init_textures(t_cube *cube)
     cube->map.maps = NULL;
     cube->map.n_maps = NULL;
     cube->text.colour = NULL;
+
 }
 
 static void free_textures(t_cube *cube)
@@ -34,21 +35,11 @@ static void free_textures(t_cube *cube)
     return ;
 }
 
-
-void	free_cube(t_cube *cube, char *msg)
+void free_maps(t_cube *cube)
 {
-    printf("Error\n");
-    printf("%s\n",msg);
-    int	i;
+    int i;
 
-	if (cube->lines)
-	{
-        i = -1;
-		while (cube->lines[++i])
-            free(cube->lines[i]);
-		free(cube->lines);
-	}
-	if (cube->map.maps)
+    if (cube->map.maps)
 	{
         i = -1;
 		if (cube->map.maps[++i])
@@ -68,6 +59,29 @@ void	free_cube(t_cube *cube, char *msg)
         }
         free(cube->map.n_maps);
     }
+}
+
+void	free_cube(t_cube *cube, char *msg)
+{
+    printf("Error\n");
+    printf("%s\n",msg);
+    int	i;
+
+	if (cube->lines)
+	{
+        i = -1;
+		while (cube->lines[++i])
+            free(cube->lines[i]);
+		free(cube->lines);
+	}
+    if (cube->text.colour)
+	{
+        i = -1;
+		while (cube->text.colour[++i])
+            free(cube->text.colour[i]);
+		free(cube->text.colour);
+	}
     free_textures(cube);
+    free_maps(cube);
     exit(1);
 }

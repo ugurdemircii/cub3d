@@ -8,6 +8,7 @@
 
 int close_window(t_cube *cube)
 {
+    (void)cube;
     exit(0);
     return (0);
 }
@@ -41,6 +42,7 @@ void init_game_values(t_cube *cube)
     if (cube->game == NULL)
         exit(printf("Error\nmalloc failed\n"));
     cube->game->mlx = mlx_init();
+    load_textures(cube);
     cube->game->win = mlx_new_window(cube->game->mlx, SCREENW, SCREENH, "cub3D");
     if (cube->game->mlx == NULL || cube->game->win == NULL)
         exit(printf("Error\nmlx_init or mlx_new_window failed\n"));
@@ -63,7 +65,6 @@ void render(t_cube *cube)
 {
     init_game_values(cube);
     set_dir(cube->player.dir, cube->game);
-    load_textures(cube);
     start_raycasting(cube);
     mlx_hook(cube->game->win, 2, 1L<<0, key_press, cube);
     mlx_hook(cube->game->win, 3, 1L<<1, key_release, cube);

@@ -18,11 +18,41 @@ int is_empty_line(char *line)
     return (1);
 }
 
+int check_identifiers(t_cube *cube)
+{
+    int i;
+    int j;
+    int count;
+
+    i = 0;
+    count = 0;
+    while (i < cube->map.map_start)
+    {
+        if (cube->lines[i][0] != '\0')
+        {
+            j = 0;
+            while (cube->lines[i][j])
+            {
+                if (ft_isspace(cube->lines[i][j]))
+                    j++;
+                else if (cube->lines[i][j] != '\0')
+                {
+                    count++;
+                    break ;
+                }
+            }
+        }
+        i++;
+    }
+    return (count);
+}
 
 static int	get_map(t_cube *cube)
 {
     int	i;
     find_map_start(cube);
+    if (check_identifiers(cube) != 6)
+        free_cube(cube,"Invalid char in file");
     count_map_height(cube);
     count_map_width(cube);
 	if (map_alloc(cube))
@@ -62,9 +92,6 @@ int map_check(t_cube *cube)
 
 
 
-
-
-
 int parser(t_cube *cube, char **argv)
 {
     int i;
@@ -77,7 +104,7 @@ int parser(t_cube *cube, char **argv)
     while (cube->lines[i])
     {
         if (is_maps_line(cube->lines[i]))
-            break;
+        break;
         if (cube->lines[i][0] == '\0')
         {
             i++;
@@ -101,7 +128,7 @@ int main(int argc, char **argv)
 
     if (argc != 2)
     {
-        printf("Error\n Invalid argc\n");
+        printf("Error\nInvalid argc\n");
         return 1;
     }
     if (parser(&cube, argv))

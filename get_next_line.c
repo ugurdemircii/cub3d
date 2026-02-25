@@ -72,7 +72,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = NULL;
-	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	buf = (char *)ft_calloc(sizeof(char) * (BUFFER_SIZE + 1), 1);
 	if (!buf)
 		return (NULL);
 	line = read_buffer(fd, buf, backup);
