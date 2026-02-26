@@ -6,28 +6,29 @@
 /*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:44:40 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 21:03:25 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/26 22:15:54 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "get_next_line.h"
+
 # include "libft/libft.h"
 # include "mlx/mlx.h"
 # include <fcntl.h>
 # include <math.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
 
 # ifndef SCREENW
-#  define SCREENW 800
+#  define SCREENW 1600
 # endif
 
 # ifndef SCREENH
-#  define SCREENH 800
+#  define SCREENH 1600
+# endif
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
 # endif
 
 typedef struct s_values
@@ -133,6 +134,7 @@ typedef struct s_cube
 #  define BUFFER_SIZE 42
 # endif
 
+char			*get_next_line(int fd);
 int				ft_printf(const char *format, ...);
 char			*get_next_line(int fd);
 char			*ft_strtrim(char const *s1, char const *set);

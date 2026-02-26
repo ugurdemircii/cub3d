@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calculate.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:40:51 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 18:09:31 by udemirci         ###   ########.fr       */
+/*   Updated: 2026/02/26 22:09:19 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

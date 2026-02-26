@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42.fr>              #+#  +:+       +#+        */
+/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-13 13:22:36 by eakkoc            #+#    #+#             */
-/*   Updated: 2025-04-13 13:22:36 by eakkoc           ###   ########.fr       */
+/*   Created: 2025/04/13 13:22:36 by eakkoc            #+#    #+#             */
+/*   Updated: 2026/02/26 22:05:40 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "cub3d.h"
 
 static char	*read_buffer(int fd, char *buf, char *backup)
 {

@@ -6,17 +6,11 @@
 /*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:51:29 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 20:54:08 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/26 22:16:33 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "mlx/mlx.h"
-#include <math.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 void	set_dir(char dir, t_game *game)
 {
