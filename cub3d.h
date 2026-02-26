@@ -6,7 +6,7 @@
 /*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:44:40 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 20:58:22 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/26 21:03:25 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ typedef struct s_cube
 #  define BUFFER_SIZE 42
 # endif
 
+int				ft_printf(const char *format, ...);
 char			*get_next_line(int fd);
 char			*ft_strtrim(char const *s1, char const *set);
 int				parse_colour(t_cube *cube, char *line);

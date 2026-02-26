@@ -6,7 +6,7 @@
 /*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 20:25:58 by eakkoc            #+#    #+#             */
-/*   Updated: 2026/02/26 20:50:48 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/26 21:04:16 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		printf("Error\nInvalid argc\n");
+		ft_printf("Error\nInvalid argc\n");
 		return (1);
 	}
 	if (parser(&cube, argv))

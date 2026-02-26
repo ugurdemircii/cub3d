@@ -6,7 +6,7 @@
 /*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 20:25:54 by eakkoc            #+#    #+#             */
-/*   Updated: 2026/02/26 20:35:40 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/26 21:32:04 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	free_cube(t_cube *cube, char *msg)
 {
 	int	i;
 
-	printf("%s", msg);
+	ft_printf("%s", msg);
 	if (cube->lines)
 	{
 		i = -1;
@@ -96,14 +96,9 @@ void	free_cube(t_cube *cube, char *msg)
 			free(cube->lines[i]);
 		free(cube->lines);
 	}
-	if (cube->text.colour)
-	{
-		i = -1;
-		while (cube->text.colour[++i])
-			free(cube->text.colour[i]);
-		free(cube->text.colour);
-	}
 	free_textures(cube);
 	free_maps(cube);
-	exit(1);
+    if (msg[0] == '\0')
+        exit(0);
+    exit(1);
 }

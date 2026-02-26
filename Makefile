@@ -6,7 +6,7 @@ CFLAGS = -Wall -Wextra -Werror
 SRC = raycasting.c calculate.c main.c render_utils.c color.c \
 		key_loop_control.c movement.c rotate.c file_check.c \
 		free.c get_next_line.c map_check.c map.c space_check.c \
-		texture_parser.c texture.c utils.c player.c
+		texture_parser.c texture.c utils.c player.c ft_printf.c
 
 OBJ = $(SRC:.c=.o)
 
