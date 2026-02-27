@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 20:25:42 by eakkoc            #+#    #+#             */
-/*   Updated: 2026/02/27 04:23:55 by udemirci         ###   ########.fr       */
+/*   Updated: 2026/02/27 16:15:22 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,25 +52,6 @@ static unsigned long	add_colour(char **colour)
 	b = ft_atoi(colour[2]);
 	result = ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 	return (result);
-}
-
-void	check_colour_parts(t_cube *cube)
-{
-	int	k;
-
-	k = 0;
-	if (!cube->text.colour[0] || !cube->text.colour[1] || !cube->text.colour[2])
-	{
-		free_colour(cube);
-		free_cube(cube, "Error\nMissing colour part\n");
-	}
-	while (ft_isspace(cube->text.colour[2][k]))
-		k++;
-	if (cube->text.colour[2][k] == '\0')
-	{
-		free_colour(cube);
-		free_cube(cube, "Error\nMissing colour part\n");
-	}
 }
 
 static void	assign_colour_values(t_cube *cube, char type)

@@ -3,39 +3,44 @@ NAME = cub3D
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = raycasting.c calculate.c main.c render_utils.c color.c \
+SRCS = raycasting.c calculate.c main.c render_utils.c color.c \
 		key_loop_control.c movement.c rotate.c file_check.c \
 		free.c get_next_line.c map_check.c map.c space_check.c \
 		texture_parser.c texture.c utils.c player.c ft_printf.c
 
-OBJ = $(SRC:.c=.o)
+OBJS = $(SRCS:.c=.o)
 
 MLX_DIR = mlx
 LIBFT_DIR = libft
 
-MLX_FLAGS = -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm -lz
-LIBFT_FLAGS = -L$(LIBFT_DIR) -lft
+MLX = $(MLX_DIR)/libmlx_Linux.a
+LIBFT = $(LIBFT_DIR)/libft.a
 
-INCLUDES = -I/usr/include -I$(MLX_DIR) -I$(LIBFT_DIR)
+LDFLAGS = -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm -lz \
+		  -L$(LIBFT_DIR) -lft
 
-%.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJS) $(LIBFT) $(MLX)
 	make -C $(MLX_DIR)
 	make -C $(LIBFT_DIR)
-	$(CC) $(OBJ) $(LIBFT_FLAGS) $(MLX_FLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(NAME)
+
+$(LIBFT):
+	make -C $(LIBFT_DIR)
+
+$(MLX):
+	make -C $(MLX_DIR)
 
 clean:
-	rm -f $(OBJ)
-	make clean -C $(MLX_DIR)
-	make clean -C $(LIBFT_DIR)
+	rm -f $(OBJS)
+	make -C $(MLX_DIR) clean
+	make -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
-	make fclean -C $(LIBFT_DIR)
+	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 20:26:19 by eakkoc            #+#    #+#             */
-/*   Updated: 2026/02/27 02:05:04 by udemirci         ###   ########.fr       */
+/*   Updated: 2026/02/27 16:15:27 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	check_colour_parts(t_cube *cube)
+{
+	int	k;
+
+	k = 0;
+	if (!cube->text.colour[0] || !cube->text.colour[1] || !cube->text.colour[2])
+	{
+		free_colour(cube);
+		free_cube(cube, "Error\nMissing colour part\n");
+	}
+	while (ft_isspace(cube->text.colour[2][k]))
+		k++;
+	if (cube->text.colour[2][k] == '\0')
+	{
+		free_colour(cube);
+		free_cube(cube, "Error\nMissing colour part\n");
+	}
+}
 
 int	is_maps_line(char *line)
 {

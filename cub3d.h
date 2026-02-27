@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:44:40 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/27 03:02:14 by udemirci         ###   ########.fr       */
+/*   Updated: 2026/02/27 16:16:30 by eakkoc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-
 
 # include "libft/libft.h"
 # include "mlx/mlx.h"
@@ -130,7 +129,6 @@ typedef struct s_cube
 	t_game		*game;
 }				t_cube;
 
-
 char			*get_next_line(int fd);
 int				ft_printf(const char *format, ...);
 int				parse_colour(t_cube *cube, char *line);
@@ -157,7 +155,7 @@ int				up_down_check(t_cube *cube);
 int				check_sides(t_cube *cube);
 int				locate_player(t_cube *cube);
 int				texture_check(t_cube *cube, char *line);
-void				check_path(t_cube *cube, char *path);
+void			check_path(t_cube *cube, char *path);
 void			read_lines(t_cube *cube, char *path);
 int				is_maps_line(char *line);
 int				is_map_line(char *line);
@@ -175,4 +173,5 @@ int				close_window(t_cube *cube);
 void			free_colour(t_cube *cube);
 void			destroy_textures(t_cube *cube);
 void			free_game(t_cube *cube, char *msg);
+void			check_colour_parts(t_cube *cube);
 #endif
