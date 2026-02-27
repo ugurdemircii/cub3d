@@ -6,13 +6,13 @@
 /*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:47:58 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 17:50:58 by udemirci         ###   ########.fr       */
+/*   Updated: 2026/02/27 01:58:34 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	is_wall(double x, double y, char **map)
+static int	is_wall(double x, double y, char **map)
 {
 	int	mapx;
 	int	mapy;

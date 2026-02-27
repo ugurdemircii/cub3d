@@ -1,4 +1,8 @@
-F 20,20,20
+EA textures/east.xpm
+NO textures/north.xpm
+
+WE textures/west.xpm
+
 C 200,200,200
 
 11111

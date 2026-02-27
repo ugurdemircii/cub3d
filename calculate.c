@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   calculate.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:40:51 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 22:09:19 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/27 01:55:00 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_values(t_values *values, t_cube *cube, int x)
+static void	set_values(t_values *values, t_cube *cube, int x)
 {
 	values->cam_x = 2 * x / (double)SCREENW - 1;
 	values->dir_x = cos(cube->game->angle);
@@ -29,7 +29,7 @@ void	set_values(t_values *values, t_cube *cube, int x)
 	values->spos_y = cube->game->posy / 64.0;
 }
 
-void	calc_values(t_cube *cube, int x, t_values *values)
+static void	calc_values(t_cube *cube, int x, t_values *values)
 {
 	set_values(values, cube, x);
 	if (values->raydir_x < 0)
@@ -54,7 +54,7 @@ void	calc_values(t_cube *cube, int x, t_values *values)
 	}
 }
 
-int	dda_loop(t_values *values, t_game *game)
+static int	dda_loop(t_values *values, t_game *game)
 {
 	int	hit;
 	int	side;
@@ -80,7 +80,7 @@ int	dda_loop(t_values *values, t_game *game)
 	return (side);
 }
 
-void	set_line_h(t_cube *cube, t_values *values, double dist)
+static void	set_line_h(t_cube *cube, t_values *values, double dist)
 {
 	values->line_h = (int)(SCREENH / dist);
 	values->start = -values->line_h / 2 + SCREENH / 2;

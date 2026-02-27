@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:51:29 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 22:16:33 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/27 01:48:14 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_dir(char dir, t_game *game)
+static void	set_dir(char dir, t_game *game)
 {
 	if (dir == 'E')
 		game->angle = 0.0;
@@ -36,7 +36,7 @@ void	start_raycasting(t_cube *cube)
 	mlx_destroy_image(cube->game->mlx, cube->game->img);
 }
 
-void	init_game_values(t_cube *cube)
+static void	init_game_values(t_cube *cube)
 {
 	cube->game = ft_calloc(sizeof(t_game), 1);
 	cube->game->mlx = NULL;

@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 20:26:19 by eakkoc            #+#    #+#             */
-/*   Updated: 2026/02/26 20:26:20 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/27 02:05:04 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-int	is_valid(char c)
-{
-	if (c == '1' || c == '0' || c == ' ' || c == 'N' || c == 'S' || c == 'E'
-		|| c == 'W')
-		return (1);
-	return (0);
-}
-
-int	is_char(char c)
-{
-	if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
-		return (1);
-	return (0);
-}
 
 int	is_maps_line(char *line)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:44:40 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 22:15:54 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/27 03:02:14 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 # include <math.h>
 
 # ifndef SCREENW
-#  define SCREENW 1600
+#  define SCREENW 800
 # endif
 
 # ifndef SCREENH
-#  define SCREENH 1600
+#  define SCREENH 800
 # endif
 
 # ifndef BUFFER_SIZE
@@ -130,14 +130,9 @@ typedef struct s_cube
 	t_game		*game;
 }				t_cube;
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
 
 char			*get_next_line(int fd);
 int				ft_printf(const char *format, ...);
-char			*get_next_line(int fd);
-char			*ft_strtrim(char const *s1, char const *set);
 int				parse_colour(t_cube *cube, char *line);
 int				ft_isspace(int c);
 void			render(t_cube *cube);
@@ -148,8 +143,6 @@ void			load_textures(t_cube *cube);
 void			start_raycasting(t_cube *cube);
 int				key_press(int keycode, t_cube *cube);
 int				key_release(int keycode, t_cube *cube);
-int				handle_player_move(t_cube *cube);
-int				handle_player_rotate(t_cube *cube);
 int				game_loop(t_cube *cube);
 void			move_backward(t_game *game);
 void			move_forward(t_game *game);
@@ -164,10 +157,8 @@ int				up_down_check(t_cube *cube);
 int				check_sides(t_cube *cube);
 int				locate_player(t_cube *cube);
 int				texture_check(t_cube *cube, char *line);
-int				check_path(t_cube *cube, char *path);
+void				check_path(t_cube *cube, char *path);
 void			read_lines(t_cube *cube, char *path);
-int				is_valid(char c);
-int				is_char(char c);
 int				is_maps_line(char *line);
 int				is_map_line(char *line);
 void			count_map_height(t_cube *cube);

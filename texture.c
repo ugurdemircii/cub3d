@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 18:06:19 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 20:57:09 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/27 02:08:28 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	load_textures(t_cube *cube)
 			&size_line, &endian);
 }
 
-void	draw_texture_line(t_game *game, int *tex_data, int x, t_values *values)
+static void	draw_texture_line(t_game *game, int *tex_data, int x,
+			t_values *values)
 {
 	int				y;
 	int				index;
@@ -72,7 +73,7 @@ void	draw_texture_line(t_game *game, int *tex_data, int x, t_values *values)
 	}
 }
 
-int	*get_current_texture(t_game *game, t_values *values, int side)
+static int	*get_current_texture(t_game *game, t_values *values, int side)
 {
 	if (side == 0)
 	{

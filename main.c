@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 20:25:58 by eakkoc            #+#    #+#             */
-/*   Updated: 2026/02/26 21:04:16 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/27 04:10:15 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	check_identifiers(t_cube *cube)
+static int	check_identifiers(t_cube *cube)
 {
 	int	i;
 	int	j;
@@ -62,7 +62,7 @@ static int	get_map(t_cube *cube)
 	return (0);
 }
 
-int	map_check(t_cube *cube)
+static int	map_check(t_cube *cube)
 {
 	if (check_map_after(cube))
 		free_cube(cube, "Error\nCharacter after map\n");
@@ -78,13 +78,12 @@ int	map_check(t_cube *cube)
 	return (0);
 }
 
-int	parser(t_cube *cube, char **argv)
+static int	parser(t_cube *cube, char **argv)
 {
 	int	i;
 
 	init_textures(cube);
-	if (check_path(cube, argv[1]))
-		free_cube(cube, "Error\nFile extension error\n");
+	check_path(cube, argv[1]);
 	read_lines(cube, argv[1]);
 	i = 0;
 	while (cube->lines[i])

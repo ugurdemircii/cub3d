@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 20:25:42 by eakkoc            #+#    #+#             */
-/*   Updated: 2026/02/26 21:26:57 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/27 04:23:55 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	colour_analysis(char **colour)
+static int	colour_analysis(char **colour)
 {
 	long long	value;
 	int			j;
@@ -54,19 +54,33 @@ static unsigned long	add_colour(char **colour)
 	return (result);
 }
 
-void	assign_colour_values(t_cube *cube, char type)
+void	check_colour_parts(t_cube *cube)
 {
 	int	k;
 
 	k = 0;
 	if (!cube->text.colour[0] || !cube->text.colour[1] || !cube->text.colour[2])
+	{
+		free_colour(cube);
 		free_cube(cube, "Error\nMissing colour part\n");
+	}
 	while (ft_isspace(cube->text.colour[2][k]))
 		k++;
 	if (cube->text.colour[2][k] == '\0')
+	{
+		free_colour(cube);
 		free_cube(cube, "Error\nMissing colour part\n");
+	}
+}
+
+static void	assign_colour_values(t_cube *cube, char type)
+{
+	check_colour_parts(cube);
 	if (colour_analysis(cube->text.colour))
+	{
+		free_colour(cube);
 		free_cube(cube, "Error\nInvalid rgb value\n");
+	}
 	if (type == 'F')
 	{
 		cube->text.f_check++;
@@ -80,7 +94,7 @@ void	assign_colour_values(t_cube *cube, char type)
 	free_colour(cube);
 }
 
-void	process_colour_string(t_cube *cube, char *str, char type)
+static void	process_colour_string(t_cube *cube, char *str, char type)
 {
 	char	*trimmed;
 	int		count;
@@ -97,7 +111,10 @@ void	process_colour_string(t_cube *cube, char *str, char type)
 	cube->text.colour = ft_split(trimmed, ',');
 	free(trimmed);
 	if (count != 2 || !cube->text.colour)
+	{
+		free_colour(cube);
 		free_cube(cube, "Error\nComma error in colour\n");
+	}
 	assign_colour_values(cube, type);
 }
 

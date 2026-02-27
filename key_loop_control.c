@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_loop_control.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:45:55 by udemirci          #+#    #+#             */
-/*   Updated: 2026/02/26 20:33:59 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/27 01:58:11 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	key_release(int keycode, t_cube *cube)
 	return (0);
 }
 
-int	handle_player_move(t_cube *cube)
+static int	handle_player_move(t_cube *cube)
 {
 	int	moved;
 
@@ -76,7 +76,7 @@ int	handle_player_move(t_cube *cube)
 	return (moved);
 }
 
-int	handle_player_rotate(t_cube *cube)
+static int	handle_player_rotate(t_cube *cube)
 {
 	int	moved;
 

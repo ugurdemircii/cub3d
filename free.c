@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakkoc <eakkoc@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: udemirci <udemirci@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 20:25:54 by eakkoc            #+#    #+#             */
-/*   Updated: 2026/02/26 21:32:04 by eakkoc           ###   ########.fr       */
+/*   Updated: 2026/02/26 23:19:21 by udemirci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	free_cube(t_cube *cube, char *msg)
 	}
 	free_textures(cube);
 	free_maps(cube);
-    if (msg[0] == '\0')
-        exit(0);
-    exit(1);
+	if (msg[0] == '\0')
+		exit(0);
+	exit(1);
 }
